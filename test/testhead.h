@@ -6,7 +6,7 @@
 // define the values
 #define test_ing
 #define result
-#define INR_SIZE 12
+#define INR_SIZE 13
 #define GET_BIT(x, pos) ((x >> pos) & 1)
 #define SET(PIN, N) (PIN |= (1 << N))
 #define CLR(PIN, N) (PIN &= ~(1 << N))

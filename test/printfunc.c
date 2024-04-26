@@ -35,7 +35,7 @@ void printfunction()
     printf("\n");
 
     printf("Actual Response:\n");
-    int responseLength = (ModbusTcpTxBuf[7] == 0x06) ? 0x0C : ((ModbusTcpTxBuf[7] < 0x80) ? 0x09 + ModbusTcpTxBuf[8] : 0x09);
+    int responseLength = (ModbusTcpTxBuf[7] == 0x06 || ModbusTcpTxBuf[7] == 0x10 || ModbusTcpTxBuf[7] == 0x05) ? 0x0C : ((ModbusTcpTxBuf[7] < 0x80) ? 0x09 + ModbusTcpTxBuf[8] : 0x09);
     for (int i = 0; i < responseLength; i++)
         printf("%02X ", ModbusTcpTxBuf[i]);
     printf("\n");

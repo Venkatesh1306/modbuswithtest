@@ -1,4 +1,4 @@
-#define INR_SIZE 12
+#define INR_SIZE 13
 
 unsigned char ModbusTcpRxBuftest[INR_SIZE][100];
 unsigned char Test_TXtest[INR_SIZE][100];
