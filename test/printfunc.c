@@ -44,7 +44,7 @@ void printfunction()
 
     printf(Test_Res == 1 ? ANSI_COLOR_GREEN " Test Passed" : ANSI_COLOR_RED " Test failed\n");
 
-    if (ModbusTcpRxBuf[7] == 0x6 || ModbusTcpRxBuf[7] == 0x10)
+    if (ModbusTcpRxBuf[7] == 0x6 || ModbusTcpRxBuf[7] == 0x10 || ModbusTcpTxBuf[7] == 0x05)
         printf(test_c == 1 ? ANSI_COLOR_RED " - Data not Entered" : ANSI_COLOR_GREEN " - Data Entered");
 
     printf("\n");

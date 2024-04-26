@@ -1,0 +1,16 @@
+        -:    0:Source:D:/Project_mp/testfinal/Modbus1/modbuserror.c
+        -:    0:Programs:11
+        -:    1:#include "testingdata.h"
+        -:    2:
+        7:    3:void modbuserror(parse1 *parse, BYTE ModbusTcpTxBuf[], unsigned char exceptioncode) {
+        7:    4:    ModbusTcpTxBuf[0] = parse->TransactionID.v[1];
+        7:    5:    ModbusTcpTxBuf[1] = parse->TransactionID.v[0];
+        7:    6:    ModbusTcpTxBuf[2] = parse->ProtocolID.v[1];
+        7:    7:    ModbusTcpTxBuf[3] = parse->ProtocolID.v[0];
+        7:    8:    ModbusTcpTxBuf[4] = 0X00;
+        7:    9:    ModbusTcpTxBuf[5] = 0X03;
+        7:   10:    ModbusTcpTxBuf[6] = parse->UnitID;
+        7:   11:    ModbusTcpTxBuf[7] = parse->FunctionCode;
+        7:   12:    ModbusTcpTxBuf[8] = exceptioncode;
+        -:   13:
+        7:   14:}

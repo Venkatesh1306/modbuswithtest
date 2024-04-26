@@ -26,6 +26,22 @@ unsigned short int Test_ing(const unsigned char ModbusTcpTxBuf[], const unsigned
         }
     }
 
+    if (ModbusTcpRxBuf[7] == 0x05)
+    {
+        int reg = (ModbusTcpRxBuf[9] - 1) / 16;
+        int bit = (ModbusTcpRxBuf[9] - 1) % 16;
+
+        if (ModbusTcpRxBuf[10] == 0xff)
+        {
+            SET(regis[reg], bit);
+        }
+        else
+        {
+            CLR(regis[reg], bit);
+        }
+        test_c = (COIL[reg] != regis[reg]) ? 1:0;
+    }
+
     numRegisters = (ModbusTcpTxBuf[7] < 0x80) ? (0x08 + ModbusTcpTxBuf[8]) : 0x09;
     // send packet check for all function code
     for (increment = 0; increment < numRegisters; increment++)

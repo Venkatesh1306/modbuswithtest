@@ -1,0 +1,90 @@
+        -:    0:Source:D:/Project_mp/testfinal/Modbus1/packet_parser.c
+        -:    0:Programs:11
+        -:    1:#include "testingdata.h"
+        -:    2:unsigned int c2, d2, l2, bytesrx;
+        -:    3:unsigned char exceptioncode;
+        -:    4:
+       12:    5:WORD deserialize(parse1 *parse, BYTE *ModbusTcpRxBuf) {
+        -:    6:    //BYTE ModbusTcpTxBuf[0];
+        -:    7:
+       12:    8:    parse->TransactionID.v[1] = ModbusTcpRxBuf[0];
+       12:    9:    parse->TransactionID.v[0] = ModbusTcpRxBuf[1];
+       12:   10:    parse->ProtocolID.v[1] = ModbusTcpRxBuf[2];
+       12:   11:    parse->ProtocolID.v[0] = ModbusTcpRxBuf[3];
+       12:   12:    parse->Length = ModbusTcpRxBuf[5];
+       12:   13:    parse->UnitID = ModbusTcpRxBuf[6];
+       12:   14:    parse->FunctionCode = ModbusTcpRxBuf[7];
+       12:   15:    parse->StartAddress.v[1] = ModbusTcpRxBuf[8];
+       12:   16:    parse->StartAddress.v[0] = ModbusTcpRxBuf[9];
+       12:   17:    if(parse->FunctionCode == 0x05){
+    #####:   18:    parse->ForceData[0].v[1] = ModbusTcpRxBuf[10];
+    #####:   19:    parse->ForceData[0].v[0] = ModbusTcpRxBuf[11]; 
+        -:   20:    }
+        -:   21:    else{
+       12:   22:    parse->NumberofRegister.v[1] = ModbusTcpRxBuf[10];
+       12:   23:    parse->NumberofRegister.v[0] = ModbusTcpRxBuf[11];
+        -:   24:    }
+        -:   25:
+        -:   26:
+       12:   27:    if(parse->FunctionCode == ForceMultipleCoils) //force multiple coils
+        -:   28:    {
+    #####:   29:        parse->ByteCount = ModbusTcpRxBuf[12];
+        -:   30://        l2 = parse->ByteCount % 2;
+        -:   31://        if (l2 != 0) {
+        -:   32://            l2 = (parse->ByteCount / 2) + 1;
+        -:   33://        } else {
+        -:   34://            l2 = parse->ByteCount / 2;
+        -:   35://        }
+        -:   36:
+    #####:   37:        for (c2 = 0; c2 < parse->NumberofRegister.v[0]; c2++) {
+    #####:   38:            d2 = c2 * 2;
+        -:   39:
+    #####:   40:            parse->ForceData[c2].v[1] = ModbusTcpRxBuf[13 + d2];
+    #####:   41:            parse->ForceData[c2].v[0] = ModbusTcpRxBuf[14 + d2];
+        -:   42:        }
+        -:   43:    }
+        -:   44:
+        -:   45:
+        -:   46:    //  if (!(parse->FunctionCode == ReadCoilStatus || 
+        -:   47:    //            parse->FunctionCode == ReadInputStatus ||
+        -:   48:    //            parse->FunctionCode == ReadHoldingRegister ||
+        -:   49:    //            parse->FunctionCode == ReadInputRegisters ||
+        -:   50:    //            parse->FunctionCode == ForceSingleCoil ||
+        -:   51:    //            parse->FunctionCode == PresetSingleRegister ||
+        -:   52:    //            parse->FunctionCode == ForceMultipleCoils ||
+        -:   53:    //            parse->FunctionCode == PresetMultipleRegisters
+        -:   54:    //            )) {
+        -:   55:    //        parse->FunctionCode = parse->FunctionCode + 0x80;
+        -:   56:    //        modbuserror(parse, ModbusTcpTxBuf, Illegal_Function_Code);
+        -:   57:    //        //      modbuserror(&parsedes, &ModbusTcpTxBuf,exceptioncode);
+        -:   58:    //        //modbuserror(&parsedes,&ModbusTcpTxBuf[0],Illegal_Function_Code);
+        -:   59:    //        //return;
+        -:   60:    //    }
+        -:   61:    //else
+        -:   62:
+        -:   63:
+        -:   64:
+       12:   65:    if(parse->FunctionCode == PresetMultipleRegisters){ //Preset multiple register
+        -:   66:
+        4:   67:        parse->ByteCount = ModbusTcpRxBuf[12];
+        -:   68://        l2 = parse->ByteCount % 2;
+        -:   69://        
+        -:   70://        if (l2 != 0) {
+        -:   71://            l2 = (parse->ByteCount / 2) + 1;
+        -:   72://        } else {
+        -:   73://            l2 = parse->ByteCount / 2;
+        -:   74://        }
+        -:   75:
+       13:   76:        for (c2 = 0; c2 < parse->NumberofRegister.v[0]; c2++) {
+        9:   77:            d2 = c2 * 2;
+        -:   78:
+        9:   79:            parse->ForceData[c2].v[1] = ModbusTcpRxBuf[13 + d2];
+        9:   80:            parse->ForceData[c2].v[0] = ModbusTcpRxBuf[14 + d2];
+        -:   81:        }
+        -:   82:
+        -:   83:
+        -:   84:    }
+       12:   85:    bytesrx = 0x6 + parse->Length;
+       12:   86:    return bytesrx;
+        -:   87:}
+        -:   88:

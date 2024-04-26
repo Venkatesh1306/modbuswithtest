@@ -1,4 +1,4 @@
-#include "D:\Testing_Final\Modbus1\testingdata.h"
+#include "testingdata.h"
 //#define bitcheck(byte,nbit) ((byte) &   (1<<(nbit)))
 #define SET(x,y)  x |= (1 << y) 
 #define READ(x,y)  ((0u == (x & (1<<y)))?0u:1u)

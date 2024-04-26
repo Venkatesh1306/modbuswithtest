@@ -8,18 +8,18 @@
             "args": [
                 "-o",
                 "${workspaceFolder}/test/test",
-                //"-fprofile-arcs",
-                //"-ftest-coverage",
-                "${workspaceFolder}/Modbus1/Presetsingleregister.c",
+                "-fprofile-arcs",
+                "-ftest-coverage",
                 "${workspaceFolder}/Modbus1/FrameFunction.c",
-                "${workspaceFolder}/Modbus1/HoldingReg.c",
                 "${workspaceFolder}/Modbus1/Packet_parser.c",
                 "${workspaceFolder}/Modbus1/modbuserror.c",
+                "${workspaceFolder}/Modbus1/HoldingReg.c",
+                "${workspaceFolder}/Modbus1/Presetsingleregister.c",
                 "${workspaceFolder}/Modbus1/presetmultipleregisters.c",
                 "${workspaceFolder}/Modbus1/readcoilstatus.c",
+                "${workspaceFolder}/Modbus1/forcesinglecoil.c",
                 "${workspaceFolder}/test/test.c",
                 "${workspaceFolder}/test/head.c",
-                "${workspaceFolder}/test/processingdata.c",
                 "${workspaceFolder}/test/compare.c",
                 "${workspaceFolder}/test/printfunc.c"
             ],
@@ -39,24 +39,31 @@
                 "kind": "test",
                 "isDefault": true
             }
+        },
+        {
+            "label": "Generate Coverage Report",
+            "type": "shell",
+            "command": "gcov",
+            "args": [
+                "-o",
+                "${workspaceFolder}",
+                "${workspaceFolder}/FrameFunction.gcno",
+                "${workspaceFolder}/Packet_parser.gcno",
+                "${workspaceFolder}/modbuserror.gcno",
+                "${workspaceFolder}/HoldingReg.gcno",
+                "${workspaceFolder}/Presetsingleregister.gcno",
+                "${workspaceFolder}/presetmultipleregisters.gcno",
+                "${workspaceFolder}/readcoilstatus.gcno",
+                "${workspaceFolder}/forcesinglecoil.gcno",
+                "${workspaceFolder}/test.gcno",
+                "${workspaceFolder}/head.gcno",
+                "${workspaceFolder}/compare.gcno",
+                "${workspaceFolder}/printfunc.gcno"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
         }
-//       {
-//           "label": "Generate Coverage Report",
-//           "type": "shell",
-//           "command": "gcov",
-//           "args": [
-//              "-o",
-//              "${workspaceFolder}/test",
-//              "${workspaceFolder}/Modbus1/Presetsingleregister.c",
-//              "${workspaceFolder}/Modbus1/FrameFunction.c",
-//              "${workspaceFolder}/Modbus1/HoldingReg.c",
-//              "${workspaceFolder}/Modbus1/Packet_parser.c",
-//              "${workspaceFolder}/Modbus1/modbuserror.c",
-//              "${workspaceFolder}/Modbus1/presetmultipleregisters.c",
-//              "${workspaceFolder}/Modbus1/Readcoil.c",
-//              "${workspaceFolder}/test/test.c"
-//           ],
-//           "group": "test"
-//       }
- ]
+    ]
 }

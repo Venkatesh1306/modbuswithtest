@@ -1,12 +1,12 @@
-#include "D:\Testing_Final\Modbus1\testingdata.h"
+#include "testingdata.h"
 //void modbuserror(parse1 parse, BYTE *ModbusTcpTxBuf, unsigned char exceptioncode);
 //BYTE ModbusTcpTxBuf[25];
 //BYTE ModbusTcpRxBuf[25] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x03, 0x00, 0x02, 0x00, 0x02, 0x01, 0x03, 0x03};
 //WORD ModbusTxLength;
 //WORD DataRegister[26] = {0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0008, 0x0009, 0x0009, 0x0008, 0x0007, 0x0007, 0x0006, 0x0005, 0x0004, 0x0003, 0x0002, 0x0001, 0x0025, 0x0035, 0x0036, 0x9957, 0x7890}; 
 
-WORD frame_function(BYTE *ModbusTcpRxBuf, WORD *DataRegister, parse1 *parse, BYTE *ModbusTcpTxBuf,unsigned int *ModbusTxLength) {
-    WORD_VAL1 COIL;
+unsigned char COIL[100] = {0};
+WORD frame_function(BYTE *ModbusTcpRxBuf, WORD *DataRegister,unsigned char *COIL, parse1 *parse, BYTE *ModbusTcpTxBuf,unsigned int *ModbusTxLength) {
     
     deserialize(parse, ModbusTcpRxBuf);
     
@@ -43,9 +43,9 @@ WORD frame_function(BYTE *ModbusTcpRxBuf, WORD *DataRegister, parse1 *parse, BYT
     if (parse->FunctionCode == ReadCoilStatus) {
         *ModbusTxLength = readcoilstatus(ModbusTcpTxBuf, DataRegister, parse);
     }
-//    if(parse->FunctionCode == ForceSingleCoil){
-//        ModbusTxLength = forcesinglecoil(COIL, ModbusTcpTxBuf,DataRegister,parse);
-//    }
+   if(parse->FunctionCode == ForceSingleCoil){
+       *ModbusTxLength = forcesinglecoil(ModbusTcpTxBuf,COIL,parse);
+   }
     if(parse->FunctionCode == PresetMultipleRegisters)
     {
         *ModbusTxLength = presetmultipleregisters(ModbusTcpTxBuf, DataRegister, parse);

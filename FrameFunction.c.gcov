@@ -1,0 +1,64 @@
+        -:    0:Source:D:/Project_mp/testfinal/Modbus1/FrameFunction.c
+        -:    0:Programs:11
+        -:    1:#include "testingdata.h"
+        -:    2://void modbuserror(parse1 parse, BYTE *ModbusTcpTxBuf, unsigned char exceptioncode);
+        -:    3://BYTE ModbusTcpTxBuf[25];
+        -:    4://BYTE ModbusTcpRxBuf[25] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x03, 0x00, 0x02, 0x00, 0x02, 0x01, 0x03, 0x03};
+        -:    5://WORD ModbusTxLength;
+        -:    6://WORD DataRegister[26] = {0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0008, 0x0009, 0x0009, 0x0008, 0x0007, 0x0007, 0x0006, 0x0005, 0x0004, 0x0003, 0x0002, 0x0001, 0x0025, 0x0035, 0x0036, 0x9957, 0x7890}; 
+        -:    7:WORD COIL[100] = {0};
+        -:    8:
+       12:    9:WORD frame_function(BYTE *ModbusTcpRxBuf, WORD *DataRegister, parse1 *parse, BYTE *ModbusTcpTxBuf,unsigned int *ModbusTxLength) {
+        -:   10:  
+        -:   11:    WORD *COIL;
+       12:   12:    deserialize(parse, ModbusTcpRxBuf);
+        -:   13:    
+       28:   14:    if (!(parse->FunctionCode == ReadCoilStatus || 
+       22:   15:            parse->FunctionCode == ReadInputStatus ||
+       20:   16:            parse->FunctionCode == ReadHoldingRegister ||
+       18:   17:            parse->FunctionCode == ReadInputRegisters ||
+       18:   18:            parse->FunctionCode == ForceSingleCoil ||
+       14:   19:            parse->FunctionCode == PresetSingleRegister ||
+        5:   20:            parse->FunctionCode == ForceMultipleCoils ||
+        5:   21:            parse->FunctionCode == PresetMultipleRegisters
+        -:   22:            )) {
+        1:   23:        parse->FunctionCode = parse->FunctionCode + 0x80;
+        1:   24:        modbuserror(parse, ModbusTcpTxBuf, Illegal_Function_Code);
+        1:   25:        *ModbusTxLength = 0x9;
+        -:   26:        //      modbuserror(&parsedes, &ModbusTcpTxBuf,exceptioncode);
+        -:   27:        //modbuserror(&parsedes,&ModbusTcpTxBuf[0],Illegal_Function_Code);
+        -:   28:        
+        -:   29:    }
+       19:   30:   else if ((parse->StartAddress.Val > ((int) (DataRegistersize) - 1)) ||
+        8:   31:           (((parse->StartAddress.Val - 1 + parse->NumberofRegister.Val) > (int) (DataRegistersize))
+        3:   32:           && parse->FunctionCode != PresetSingleRegister) && (parse->FunctionCode != 0x01)) {
+        3:   33:       parse->FunctionCode = parse->FunctionCode + 0x80;
+        3:   34:       modbuserror(parse, ModbusTcpTxBuf, Illegal_Data_Address);
+        3:   35:       *ModbusTxLength = 0x9;
+        -:   36:   }
+        -:   37:    
+        -:   38://    else if(
+        -:   39://            )
+        -:   40:    
+       12:   41:    if (parse->FunctionCode == ReadHoldingRegister) {
+        1:   42:        *ModbusTxLength = ReadHoldingRegisters(ModbusTcpTxBuf, DataRegister, parse);
+        -:   43:    }
+       12:   44:    if (parse->FunctionCode == ReadCoilStatus) {
+        1:   45:        *ModbusTxLength = readcoilstatus(ModbusTcpTxBuf, DataRegister, parse);
+        -:   46:    }
+       12:   47:   if(parse->FunctionCode == ForceSingleCoil){
+    #####:   48:       *ModbusTxLength = forcesinglecoil(ModbusTcpTxBuf,COIL,parse);
+        -:   49:   }
+       12:   50:    if(parse->FunctionCode == PresetMultipleRegisters)
+        -:   51:    {
+        3:   52:        *ModbusTxLength = presetmultipleregisters(ModbusTcpTxBuf, DataRegister, parse);
+        -:   53:    }
+        -:   54://    if(parse->FunctionCode == ReadInputStatus){
+        -:   55://        ModbusTxLength = readinputstatus(ModbusTcpTxBuf,DataRegister, parse);
+        -:   56://    }
+       12:   57:    if(parse->FunctionCode == PresetSingleRegister){
+        3:   58:    *ModbusTxLength = presetsingleregister(ModbusTcpTxBuf,DataRegister,parse);
+        -:   59:    }
+        -:   60:    
+       12:   61:    return *ModbusTxLength;
+        -:   62:}

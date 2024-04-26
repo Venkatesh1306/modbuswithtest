@@ -1,4 +1,4 @@
-#include "D:\Testing_Final\Modbus1\testingdata.h"
+#include "testingdata.h"
 unsigned int c2, d2, l2, bytesrx;
 unsigned char exceptioncode;
 
@@ -14,8 +14,15 @@ WORD deserialize(parse1 *parse, BYTE *ModbusTcpRxBuf) {
     parse->FunctionCode = ModbusTcpRxBuf[7];
     parse->StartAddress.v[1] = ModbusTcpRxBuf[8];
     parse->StartAddress.v[0] = ModbusTcpRxBuf[9];
+    if(parse->FunctionCode == 0x05){
+    parse->ForceData[0].v[1] = ModbusTcpRxBuf[10];
+    parse->ForceData[0].v[0] = ModbusTcpRxBuf[11]; 
+    }
+    else{
     parse->NumberofRegister.v[1] = ModbusTcpRxBuf[10];
     parse->NumberofRegister.v[0] = ModbusTcpRxBuf[11];
+    }
+
 
     if(parse->FunctionCode == ForceMultipleCoils) //force multiple coils
     {

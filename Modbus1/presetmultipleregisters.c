@@ -1,4 +1,4 @@
-#include "D:\Testing_Final\Modbus1\testingdata.h"
+#include "testingdata.h"
 /*QUERY FRAME:
 
 | Transaction Identifier | Protocol Identifier | Length | Unit Identifier | Function Code | Starting Address | Quantity of Registers | Byte Count | Data (2 bytes per register) |

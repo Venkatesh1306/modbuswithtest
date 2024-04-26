@@ -4,7 +4,9 @@
 //unsigned int y;
 //extern int z1, l, value;
 //l=value;
-#include "D:\Testing_Final\GenericTypeDefs_1.h"
+#include "D:\Project_mp\testfinal\GenericTypeDefs_1.h"
+#include<stdio.h>
+
 
 #define ReadCoilStatus 01
 #define ReadInputStatus 02
@@ -45,7 +47,7 @@ void modbuserror(parse1 *parse, BYTE ModbusTcpTxBuf[], unsigned char exceptionco
 WORD deserialize (parse1 *parse,BYTE *ModbusTcpRxBuf);
 
 WORD ReadHoldingRegisters(BYTE *ModbusTcpTxBuf, WORD *DataRegister, parse1 *parse);
-WORD forcesinglecoil(WORD_VAL1 COIL, BYTE *ModbusTcpTxBuf, WORD *DataRegister, parse1 *parse);
+WORD forcesinglecoil(BYTE *ModbusTcpTxBuf, unsigned char *COIL, parse1 *parse);
 WORD ReadInputRegister(BYTE *ModbusTcpTxBuf, WORD *DataRegister, parse1 *parse);
 WORD presetmultipleregisters(BYTE *ModbusTcpTxBuf, WORD *DataRegister, parse1 *parse);
 WORD readinputstatus(BYTE *ModbusTcpTxBuf, WORD *DataRegister, parse1 *parse);
