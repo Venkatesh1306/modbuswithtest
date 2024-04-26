@@ -1,0 +1,62 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build with Coverage",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-o",
+                "${workspaceFolder}/test/test",
+                //"-fprofile-arcs",
+                //"-ftest-coverage",
+                "${workspaceFolder}/Modbus1/Presetsingleregister.c",
+                "${workspaceFolder}/Modbus1/FrameFunction.c",
+                "${workspaceFolder}/Modbus1/HoldingReg.c",
+                "${workspaceFolder}/Modbus1/Packet_parser.c",
+                "${workspaceFolder}/Modbus1/modbuserror.c",
+                "${workspaceFolder}/Modbus1/presetmultipleregisters.c",
+                "${workspaceFolder}/Modbus1/readcoilstatus.c",
+                "${workspaceFolder}/test/test.c",
+                "${workspaceFolder}/test/head.c",
+                "${workspaceFolder}/test/processingdata.c",
+                "${workspaceFolder}/test/compare.c",
+                "${workspaceFolder}/test/printfunc.c"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run Tests",
+            "type": "shell",
+            "command": "${workspaceFolder}/test/test",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
+//       {
+//           "label": "Generate Coverage Report",
+//           "type": "shell",
+//           "command": "gcov",
+//           "args": [
+//              "-o",
+//              "${workspaceFolder}/test",
+//              "${workspaceFolder}/Modbus1/Presetsingleregister.c",
+//              "${workspaceFolder}/Modbus1/FrameFunction.c",
+//              "${workspaceFolder}/Modbus1/HoldingReg.c",
+//              "${workspaceFolder}/Modbus1/Packet_parser.c",
+//              "${workspaceFolder}/Modbus1/modbuserror.c",
+//              "${workspaceFolder}/Modbus1/presetmultipleregisters.c",
+//              "${workspaceFolder}/Modbus1/Readcoil.c",
+//              "${workspaceFolder}/test/test.c"
+//           ],
+//           "group": "test"
+//       }
+ ]
+}
