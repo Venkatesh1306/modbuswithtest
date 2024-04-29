@@ -24,7 +24,7 @@ extern unsigned char ModbusTcpRxBuf[100];
 extern unsigned char ModbusTcpTxBuf[25];
 extern unsigned char Test_TX[25];
 extern unsigned short int COIL1[25];
-extern unsigned char COIL[25];
+extern unsigned short int COIL[25];
 extern unsigned char regis[25];
 extern unsigned short int Dataregister[100];
 extern int increment;
@@ -40,5 +40,5 @@ parse1 parse;
 // declaration of the function
 unsigned short int processexpecteddata(unsigned char *ModbusTcpRxBuf, unsigned char *Test_TX, unsigned short int Dataregister[]);
 unsigned short int Test_ing(const unsigned char ModbusTcpTxBuf[], const unsigned char Test_TX[]);
-WORD frame_function(BYTE *ModbusTcpRxBuf, WORD *Dataregister, WORD *InputRegister, unsigned char *COIL, parse1 *parse, BYTE *ModbusTcpTxBuf, unsigned int *ModbusTxLength);
+WORD frame_function(BYTE *ModbusTcpRxBuf, WORD *Dataregister, WORD *InputRegister, unsigned short int *COIL, parse1 *parse, BYTE *ModbusTcpTxBuf, unsigned int *ModbusTxLength);
 void printfunction();

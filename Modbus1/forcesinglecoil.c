@@ -23,7 +23,7 @@ RESPONSE FRAME:
  * RESPONSE FRAME = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x10, 0x05, 0x00, 0xAC, 0xFF, 0x00}
  */
 
-WORD forcesinglecoil(BYTE *ModbusTcpTxBuf, unsigned char*COIL, parse1 *parse) {
+WORD forcesinglecoil(BYTE *ModbusTcpTxBuf, unsigned short int*COIL, parse1 *parse) {
     unsigned int length, Regbit, reg;
 
     ModbusTcpTxBuf[0] = parse->TransactionID.v[1];

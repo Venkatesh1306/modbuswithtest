@@ -31,7 +31,7 @@ unsigned int TempReg;
  */
 
 WORD
-readcoilstatus(BYTE *ModbusTcpTxBuf, WORD COIL[0], parse1 *parse) {
+readcoilstatus(BYTE *ModbusTcpTxBuf,WORD *DataRegister, parse1 *parse) {
 
     // WORD dummy[100];
 
@@ -62,7 +62,7 @@ readcoilstatus(BYTE *ModbusTcpTxBuf, WORD COIL[0], parse1 *parse) {
         regTx = (bit_count) / 16; // 20 - 1 /16 = 1st  reg -- register increment
         
     
-        coil_bit = READ(COIL[reg], Regbit);
+        coil_bit = READ(DataRegister[reg], Regbit);
         Txtempbuf[regTx] |=  coil_bit << RegbitTx;
         
     

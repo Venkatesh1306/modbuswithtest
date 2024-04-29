@@ -29,12 +29,13 @@ WORD deserialize(parse1 *parse, BYTE *ModbusTcpRxBuf)
     if (parse->FunctionCode == ForceMultipleCoils) // force multiple coils
     {
         parse->ByteCount = ModbusTcpRxBuf[12];
-        for (c2 = 0; c2 < parse->ByteCount; c2++)
+        for (c2 = 0; c2 < parse->ByteCount/2; c2++)
         {
 
-            parse->Coil_data[c2] = (ModbusTcpRxBuf[14 + c2] << 8) | ModbusTcpRxBuf[13 + c2];
-            // parse->ForceData[c2].v[0] = ModbusTcpRxBuf[14 + d2];
+            parse->Coil_data[c2] = (ModbusTcpRxBuf[14 + c2*2] << 8) | ModbusTcpRxBuf[13 + c2*2];
+            printf("%04x \n",parse->Coil_data[c2]);
         }
+        
     }
 
     if (parse->FunctionCode == PresetMultipleRegisters)

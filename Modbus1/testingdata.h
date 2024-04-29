@@ -50,14 +50,14 @@ void modbuserror(parse1 *parse, BYTE ModbusTcpTxBuf[], unsigned char exceptionco
 WORD deserialize (parse1 *parse,BYTE *ModbusTcpRxBuf);
 
 WORD ReadHoldingRegisters(BYTE *ModbusTcpTxBuf, WORD *DataRegister, parse1 *parse);
-WORD forcesinglecoil(BYTE *ModbusTcpTxBuf, unsigned char *COIL, parse1 *parse);
+WORD forcesinglecoil(BYTE *ModbusTcpTxBuf, unsigned short int *COIL, parse1 *parse);
 WORD presetmultipleregisters(BYTE *ModbusTcpTxBuf, WORD *DataRegister, parse1 *parse);
 WORD ReadInputReg(BYTE *ModbusTcpTxBuf, WORD *InputRegister, parse1 *parse);
 WORD readinputstatus(BYTE *ModbusTcpTxBuf, WORD *InputRegister, parse1 *parse);
 WORD presetsingleregister(BYTE *ModbusTcpTxBuf, WORD *DataRegister, parse1 *parse);
 WORD presetmultipleregisters(BYTE *ModbusTcpTxBuf, WORD *DataRegister, parse1 *parse);
-WORD readcoilstatus(BYTE *ModbusTcpTxBuf, WORD COIL[0], parse1 *parse);
-WORD forcemultiplecoils (BYTE *ModbusTcpTxBuf, unsigned char  *COIL , parse1 *parse);
+WORD readcoilstatus(BYTE *ModbusTcpTxBuf, WORD *DataRegister, parse1 *parse);
+WORD forcemultiplecoils (BYTE *ModbusTcpTxBuf, unsigned short int  *COIL , parse1 *parse);
 //parse1 parse;
 //BYTE ModbusTcpTxBuf[25];
 //BYTE ModbusTcpRxBuf[25] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x03, 0x00, 0x02, 0x00, 0x02, 0x01, 0x03, 0x03};

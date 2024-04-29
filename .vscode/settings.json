@@ -2,6 +2,7 @@
     "files.associations": {
         "testingdata.h": "c",
         "stdio.h": "c",
-        "generictypedefs_1.h": "c"
+        "generictypedefs_1.h": "c",
+        "testhead.h": "c"
     }
 }
