@@ -1,55 +1,106 @@
         -:    0:Source:D:/Project_mp/testfinal/test/compare.c
-        -:    0:Programs:11
+        -:    0:Programs:14
         -:    1:#include "testhead.h"
         -:    2:
         -:    3:// function for testing the output with the expected output
-       12:    4:unsigned short int Test_ing(const unsigned char ModbusTcpTxBuf[], const unsigned char Test_TX[])
+        6:    4:unsigned short int Test_ing(const unsigned char ModbusTcpTxBuf[], const unsigned char Test_TX[])
         -:    5:{
-       12:    6:    Test_Res = 1;
-       12:    7:    test_c = 0;
+        6:    6:    Test_Res = 1;
+        6:    7:    test_c = 0;
         -:    8:
         -:    9:    // Data enter check for FC 0x06
-       12:   10:    if (ModbusTcpRxBuf[7] == 0x06)
+        6:   10:    if (ModbusTcpRxBuf[7] == 0x06)
         -:   11:    {
-        4:   12:        add = (ModbusTcpRxBuf[8] << 8) | ModbusTcpRxBuf[9];
-        4:   13:        test_c = (Dataregister[add] != ((ModbusTcpRxBuf[10] << 8) | ModbusTcpRxBuf[11])) ? 1 : 0;
+    #####:   12:        add = (ModbusTcpRxBuf[8] << 8) | ModbusTcpRxBuf[9];
+    #####:   13:        test_c = (Dataregister[add] != ((ModbusTcpRxBuf[10] << 8) | ModbusTcpRxBuf[11])) ? 1 : 0;
         -:   14:    }
         -:   15:
         -:   16:    // Data enter check for FC  0x10
-       12:   17:    if (ModbusTcpRxBuf[7] == 0x10)
+        6:   17:    if (ModbusTcpRxBuf[7] == 0x10)
         -:   18:    {
-        4:   19:        add = (ModbusTcpRxBuf[8] << 8) | ModbusTcpRxBuf[9];
-        4:   20:        numRegisters = (ModbusTcpRxBuf[10] << 8) | ModbusTcpRxBuf[11];
+    #####:   19:        add = (ModbusTcpRxBuf[8] << 8) | ModbusTcpRxBuf[9];
+    #####:   20:        numRegisters = (ModbusTcpRxBuf[10] << 8) | ModbusTcpRxBuf[11];
         -:   21:
-       13:   22:        for (increment = 0; increment < numRegisters; increment++)
+    #####:   22:        for (increment = 0; increment < numRegisters; increment++)
         -:   23:        {
-        9:   24:            receivedData = (ModbusTcpRxBuf[13 + increment * 2] << 8) | ModbusTcpRxBuf[14 + increment * 2];
-        9:   25:            test_c = (Dataregister[add + increment] != receivedData) ? 1 : 0;
+    #####:   24:            receivedData = (ModbusTcpRxBuf[13 + increment * 2] << 8) | ModbusTcpRxBuf[14 + increment * 2];
+    #####:   25:            test_c = (Dataregister[add + increment] != receivedData) ? 1 : 0;
         -:   26:        }
         -:   27:    }
         -:   28:
-       12:   29:    if (ModbusTcpRxBuf[7] == 0x05)
-        -:   30:    {
-    #####:   31:        int reg = (ModbusTcpRxBuf[9] - 1) / 16;
-    #####:   32:        int bit = (ModbusTcpRxBuf[9] - 1) % 16;
-        -:   33:
-    #####:   34:        if (ModbusTcpRxBuf[10] == 0xff)
-        -:   35:        {
-    #####:   36:            SET(regis[reg], bit);
-        -:   37:        }
-        -:   38:        else
-        -:   39:        {
-    #####:   40:            CLR(regis[reg], bit);
-        -:   41:        }
-    #####:   42:        test_c = (COIL[reg] != regis[reg]) ? 1:0;
-        -:   43:    }
-        -:   44:
-       12:   45:    numRegisters = (ModbusTcpTxBuf[7] < 0x80) ? (0x08 + ModbusTcpTxBuf[8]) : 0x09;
-        -:   46:    // send packet check for all function code
-      123:   47:    for (increment = 0; increment < numRegisters; increment++)
-        -:   48:    {
-      111:   49:        Test_Res = (ModbusTcpTxBuf[increment] != Test_TX[increment]) ? 0 : 1;
-        -:   50:    }
-        -:   51:
-       12:   52:    return Test_Res;
-        -:   53:}
+        -:   29:    // Data enter check for FC  0x05
+        6:   30:    if (ModbusTcpRxBuf[7] == 0x05)
+        -:   31:    {
+    #####:   32:        int reg = (ModbusTcpRxBuf[9] - 1) / 16;
+    #####:   33:        int bit = (ModbusTcpRxBuf[9] - 1) % 16;
+        -:   34:
+    #####:   35:        if (ModbusTcpRxBuf[10] == 0xff)
+        -:   36:        {
+    #####:   37:            SET(regis[reg], bit);
+        -:   38:        }
+        -:   39:        else
+        -:   40:        {
+    #####:   41:            CLR(regis[reg], bit);
+        -:   42:        }
+    #####:   43:        test_c = (COIL[reg] != regis[reg]) ? 1 : 0;
+        -:   44:    }
+        -:   45:
+        6:   46:    if (ModbusTcpRxBuf[7] == 0x0f)
+        -:   47:    {
+        -:   48:        unsigned int bit_count, reg, regbit, a, b, d;
+        -:   49:        unsigned short int c[25];
+        -:   50:
+        6:   51:        for (int i = 0; i < ModbusTcpRxBuf[12]; i++)
+        -:   52:        {
+        4:   53:            c[i] = (ModbusTcpRxBuf[(i * 2) + 14] << 8) | ModbusTcpRxBuf[(i * 2) + 13];
+        -:   54:        }
+        -:   55:
+       20:   56:        for (bit_count = ModbusTcpRxBuf[11] - 1; bit_count >= 0; bit_count--)
+        -:   57:        {
+       38:   58:            regbit = ((ModbusTcpRxBuf[9] + bit_count) - 1) % 16;
+       20:   59:            reg = ((ModbusTcpRxBuf[9] + bit_count) - 1) / 16;
+        -:   60:
+       20:   61:            a = bit_count % 16;
+       20:   62:            b = bit_count / 16;
+        -:   63:
+       20:   64:            d = GET_BIT(c[b], a);
+        -:   65:
+       20:   66:            if (d == 0x1)
+        -:   67:            {
+       12:   68:                SET(COIL1[reg], regbit);
+        -:   69:            }
+        -:   70:            else
+        -:   71:            {
+        8:   72:                CLR(COIL1[reg], regbit);
+        -:   73:            }
+       20:   74:            if (bit_count == 0)
+        -:   75:            {
+        2:   76:                break;
+        -:   77:            }
+        -:   78:        }
+        2:   79:        reg = ((ModbusTcpRxBuf[9] + bit_count) - 1) / 16;
+        2:   80:        for (int i = reg; i < reg + 2; i++)
+        -:   81:        {
+        2:   82:            printf("%04x--%04x  ", COIL[i], COIL1[i]);
+        2:   83:            if ((COIL[i] != COIL1[i]))
+        -:   84:            {
+        2:   85:                test_c = 1;
+        2:   86:                break;
+        -:   87:            }
+        -:   88:        }
+        -:   89:    }
+        -:   90:
+        6:   91:    numRegisters = (ModbusTcpTxBuf[7] < 0x80) ? (0x09 + ModbusTcpTxBuf[8]) : 0x09;
+        -:   92:    // send packet check for all function code
+       70:   93:    for (increment = 0; increment < numRegisters; increment++)
+        -:   94:    {
+        -:   95:        // Test_Res = (ModbusTcpTxBuf[increment] != Test_TX[increment]) ? 0 : 1;
+       64:   96:        if ((ModbusTcpTxBuf[increment] != Test_TX[increment]))
+        -:   97:        {
+    #####:   98:            Test_Res = 0;
+    #####:   99:            break; // Exit the loop or block
+        -:  100:        }
+        -:  101:    }
+        -:  102:
+        6:  103:    return Test_Res;
+        -:  104:}

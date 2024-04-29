@@ -1,5 +1,5 @@
         -:    0:Source:D:/Project_mp/testfinal/Modbus1/forcesinglecoil.c
-        -:    0:Programs:11
+        -:    0:Programs:14
         -:    1:#include "testingdata.h"
         -:    2:#define SET(x,y)  x |= (1 << y) 
         -:    3:#define READ(x,y)  ((0u == (x & (1<<y)))?0u:1u)
@@ -25,7 +25,7 @@
         -:   23: * RESPONSE FRAME = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x10, 0x05, 0x00, 0xAC, 0xFF, 0x00}
         -:   24: */
         -:   25:
-    #####:   26:WORD forcesinglecoil(BYTE *ModbusTcpTxBuf, WORD *COIL, parse1 *parse) {
+    #####:   26:WORD forcesinglecoil(BYTE *ModbusTcpTxBuf, unsigned char*COIL, parse1 *parse) {
         -:   27:    unsigned int length, Regbit, reg;
         -:   28:
     #####:   29:    ModbusTcpTxBuf[0] = parse->TransactionID.v[1];
@@ -48,18 +48,15 @@
         -:   46:
     #####:   47:    Regbit = (parse->StartAddress.Val - 1) % 16; // 20 - 1 % 16 = 4th bit
     #####:   48:    reg = (parse->StartAddress.Val - 1) / 16; // 20 - 1 /16 = 1st  reg
-        -:   49:
-    #####:   50:    if (parse->ForceData[0].v[1] == 0xFF) {
-    #####:   51:        SET(COIL[reg], Regbit);
-        -:   52:    } else {
-    #####:   53:        CLEAR(COIL[reg], Regbit);
-        -:   54:    }
-    #####:   55:    printf("%0x",COIL[reg]);
+    #####:   49:   if (parse->ForceData[0].Val == 0xFF00) {
+    #####:   50:       SET(COIL[reg], Regbit);
+        -:   51:   } else {
+    #####:   52:       CLEAR(COIL[reg], Regbit);
+        -:   53:   }
+        -:   54:    //  COIL.Addr = parse->StartAddress.v[0];
+        -:   55:    //  COIL.Val = parse->NumberofRegister.v[1];
         -:   56:
-        -:   57:    //  COIL.Addr = parse->StartAddress.v[0];
-        -:   58:    //  COIL.Val = parse->NumberofRegister.v[1];
+    #####:   57:    length = 0x6 + ModbusTcpTxBuf[5];
+    #####:   58:    return length;
         -:   59:
-    #####:   60:    length = 0x6 + ModbusTcpTxBuf[5];
-    #####:   61:    return length;
-        -:   62:
-        -:   63:}
+        -:   60:}
