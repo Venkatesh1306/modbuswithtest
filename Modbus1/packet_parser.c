@@ -33,7 +33,7 @@ WORD deserialize(parse1 *parse, BYTE *ModbusTcpRxBuf)
         {
 
             parse->Coil_data[c2] = (ModbusTcpRxBuf[14 + c2*2] << 8) | ModbusTcpRxBuf[13 + c2*2];
-            printf("%04x \n",parse->Coil_data[c2]);
+            //printf("%04x \n",parse->Coil_data[c2]);
         }
         
     }
