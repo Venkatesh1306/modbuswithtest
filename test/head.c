@@ -1,4 +1,4 @@
-#define INR_SIZE 13
+#define INR_SIZE 3
 
 unsigned char ModbusTcpRxBuftest[INR_SIZE][100];
 unsigned char Test_TXtest[INR_SIZE][100];
@@ -6,6 +6,7 @@ unsigned char ModbusTcpRxBuf[100];
 unsigned char ModbusTcpTxBuf[25];
 unsigned char Test_TX[25];
 unsigned char COIL[25];
+unsigned short int COIL1[25];
 unsigned char regis[25] = {0};
 unsigned short int Dataregister[100];
 int increment;

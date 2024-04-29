@@ -26,6 +26,7 @@ unsigned short int Test_ing(const unsigned char ModbusTcpTxBuf[], const unsigned
         }
     }
 
+    // Data enter check for FC  0x05
     if (ModbusTcpRxBuf[7] == 0x05)
     {
         int reg = (ModbusTcpRxBuf[9] - 1) / 16;
@@ -39,14 +40,64 @@ unsigned short int Test_ing(const unsigned char ModbusTcpTxBuf[], const unsigned
         {
             CLR(regis[reg], bit);
         }
-        test_c = (COIL[reg] != regis[reg]) ? 1:0;
+        test_c = (COIL[reg] != regis[reg]) ? 1 : 0;
     }
 
-    numRegisters = (ModbusTcpTxBuf[7] < 0x80) ? (0x08 + ModbusTcpTxBuf[8]) : 0x09;
+    if (ModbusTcpRxBuf[7] == 0x0f)
+    {
+        unsigned int bit_count, reg, regbit, a, b, d;
+        unsigned short int c[25];
+
+        for (int i = 0; i < ModbusTcpRxBuf[12]; i++)
+        {
+            c[i] = (ModbusTcpRxBuf[(i * 2) + 14] << 8) | ModbusTcpRxBuf[(i * 2) + 13];
+        }
+
+        for (bit_count = ModbusTcpRxBuf[11] - 1; bit_count >= 0; bit_count--)
+        {
+            regbit = ((ModbusTcpRxBuf[9] + bit_count) - 1) % 16;
+            reg = ((ModbusTcpRxBuf[9] + bit_count) - 1) / 16;
+
+            a = bit_count % 16;
+            b = bit_count / 16;
+
+            d = GET_BIT(c[b], a);
+
+            if (d == 0x1)
+            {
+                SET(COIL1[reg], regbit);
+            }
+            else
+            {
+                CLR(COIL1[reg], regbit);
+            }
+            if (bit_count == 0)
+            {
+                break;
+            }
+        }
+        reg = ((ModbusTcpRxBuf[9] + bit_count) - 1) / 16;
+        for (int i = reg; i < reg + 2; i++)
+        {
+            printf("%04x--%04x  ", COIL[i], COIL1[i]);
+            if ((COIL[i] != COIL1[i]))
+            {
+                test_c = 1;
+                break;
+            }
+        }
+    }
+
+    numRegisters = (ModbusTcpTxBuf[7] < 0x80) ? (0x09 + ModbusTcpTxBuf[8]) : 0x09;
     // send packet check for all function code
     for (increment = 0; increment < numRegisters; increment++)
     {
-        Test_Res = (ModbusTcpTxBuf[increment] != Test_TX[increment]) ? 0 : 1;
+        // Test_Res = (ModbusTcpTxBuf[increment] != Test_TX[increment]) ? 0 : 1;
+        if ((ModbusTcpTxBuf[increment] != Test_TX[increment]))
+        {
+            Test_Res = 0;
+            break; // Exit the loop or block
+        }
     }
 
     return Test_Res;

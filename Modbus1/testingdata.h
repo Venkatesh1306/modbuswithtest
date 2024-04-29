@@ -16,7 +16,8 @@
 #define PresetSingleRegister 06
 #define ForceMultipleCoils 15
 #define PresetMultipleRegisters 16
-#define DataRegistersize 0x19
+
+#define DataRegistersize 500
 
 #define Illegal_Function_Code   0x01u       
 #define Illegal_Data_Address    0x02u
@@ -31,8 +32,10 @@ typedef struct
   BYTE FunctionCode;
   WORD_VAL StartAddress;
   WORD_VAL NumberofRegister;
+  WORD Coil_data[25];
   WORD ByteCount;
-  WORD_VAL ForceData[] ;
+  WORD_VAL ForceData[];
+  
 } parse1;
 
 typedef struct 
@@ -48,12 +51,13 @@ WORD deserialize (parse1 *parse,BYTE *ModbusTcpRxBuf);
 
 WORD ReadHoldingRegisters(BYTE *ModbusTcpTxBuf, WORD *DataRegister, parse1 *parse);
 WORD forcesinglecoil(BYTE *ModbusTcpTxBuf, unsigned char *COIL, parse1 *parse);
-WORD ReadInputRegister(BYTE *ModbusTcpTxBuf, WORD *DataRegister, parse1 *parse);
 WORD presetmultipleregisters(BYTE *ModbusTcpTxBuf, WORD *DataRegister, parse1 *parse);
-WORD readinputstatus(BYTE *ModbusTcpTxBuf, WORD *DataRegister, parse1 *parse);
+WORD ReadInputReg(BYTE *ModbusTcpTxBuf, WORD *InputRegister, parse1 *parse);
+WORD readinputstatus(BYTE *ModbusTcpTxBuf, WORD *InputRegister, parse1 *parse);
 WORD presetsingleregister(BYTE *ModbusTcpTxBuf, WORD *DataRegister, parse1 *parse);
 WORD presetmultipleregisters(BYTE *ModbusTcpTxBuf, WORD *DataRegister, parse1 *parse);
 WORD readcoilstatus(BYTE *ModbusTcpTxBuf, WORD COIL[0], parse1 *parse);
+WORD forcemultiplecoils (BYTE *ModbusTcpTxBuf, unsigned char  *COIL , parse1 *parse);
 //parse1 parse;
 //BYTE ModbusTcpTxBuf[25];
 //BYTE ModbusTcpRxBuf[25] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x03, 0x00, 0x02, 0x00, 0x02, 0x01, 0x03, 0x03};
