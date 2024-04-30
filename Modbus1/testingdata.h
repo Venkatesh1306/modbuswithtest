@@ -17,7 +17,8 @@
 #define ForceMultipleCoils 15
 #define PresetMultipleRegisters 16
 
-#define DataRegistersize 500
+#define DataRegistersize 0x25
+#define DataRegister1size 0x50
 
 #define Illegal_Function_Code   0x01u       
 #define Illegal_Data_Address    0x02u
@@ -44,6 +45,7 @@ typedef struct
     BYTE Addr;
   
 } WORD_VAL1, WORD_BITS1;
+
 
 
 void modbuserror(parse1 *parse, BYTE ModbusTcpTxBuf[], unsigned char exceptioncode);

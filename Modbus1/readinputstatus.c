@@ -3,7 +3,7 @@
 #define SET(x,y)  x |= (1 << y) 
 #define READ(x,y)  ((0u == (x & (1<<y)))?0u:1u)
 unsigned int NoOfBits, Regbit, reg, RegbitTx, regTx, byte_index, bit_count,wordOffset;
-WORD Txtempbuf[100];
+WORD Txtempbuf1[100];
 unsigned int byte_count, h, bit_index, coil_index, limit, coil_bit;
 unsigned int TempReg;
 
@@ -63,7 +63,7 @@ readinputstatus(BYTE *ModbusTcpTxBuf, WORD * InputRegister, parse1 *parse) {
         
     
         coil_bit = READ(InputRegister[reg], Regbit);
-        Txtempbuf[regTx] |=  coil_bit << RegbitTx;
+        Txtempbuf1[regTx] |=  coil_bit << RegbitTx;
         
     
     }
@@ -71,8 +71,8 @@ readinputstatus(BYTE *ModbusTcpTxBuf, WORD * InputRegister, parse1 *parse) {
     for (byte_index = 0; byte_index < (regTx+1); byte_index++) {
         //4times
         wordOffset = byte_index * 2;
-        ModbusTcpTxBuf[9 + wordOffset] = (Txtempbuf[byte_index] % 0x100);
-        ModbusTcpTxBuf[10 + wordOffset] = (Txtempbuf[byte_index] / 0x100);
+        ModbusTcpTxBuf[9 + wordOffset] = (Txtempbuf1[byte_index] % 0x100);
+        ModbusTcpTxBuf[10 + wordOffset] = (Txtempbuf1[byte_index] / 0x100);
     }
 
     limit = ModbusTcpTxBuf[5] + 0x6;

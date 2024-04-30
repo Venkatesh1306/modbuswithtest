@@ -5,7 +5,7 @@
         -:    3:#define SET(x,y)  x |= (1 << y) 
         -:    4:#define READ(x,y)  ((0u == (x & (1<<y)))?0u:1u)
         -:    5:unsigned int NoOfBits, Regbit, reg, RegbitTx, regTx, byte_index, bit_count,wordOffset;
-        -:    6:WORD Txtempbuf[100];
+        -:    6:WORD Txtempbuf1[100];
         -:    7:unsigned int byte_count, h, bit_index, coil_index, limit, coil_bit;
         -:    8:unsigned int TempReg;
         -:    9:
@@ -56,16 +56,16 @@
         1:   54:    NoOfBits = parse->NumberofRegister.Val;
         -:   55:
         -:   56:
-        3:   57:    for (bit_count = 0; bit_count < NoOfBits; bit_count++) // byte count 
+        4:   57:    for (bit_count = 0; bit_count < NoOfBits; bit_count++) // byte count 
         -:   58:    {
-        2:   59:        Regbit = (parse->StartAddress.Val + bit_count -1) % 16; // 20 - 1 % 16 = 4th bit
-        2:   60:        reg = (parse->StartAddress.Val + bit_count -1) / 16; // 20 - 1 /16 = 1st  reg
-        2:   61:        RegbitTx = (bit_count) % 16; // 20 - 1 % 16 = 4th bit -- bit increment
-        2:   62:        regTx = (bit_count) / 16; // 20 - 1 /16 = 1st  reg -- register increment
+        3:   59:        Regbit = (parse->StartAddress.Val + bit_count -1) % 16; // 20 - 1 % 16 = 4th bit
+        3:   60:        reg = (parse->StartAddress.Val + bit_count -1) / 16; // 20 - 1 /16 = 1st  reg
+        3:   61:        RegbitTx = (bit_count) % 16; // 20 - 1 % 16 = 4th bit -- bit increment
+        3:   62:        regTx = (bit_count) / 16; // 20 - 1 /16 = 1st  reg -- register increment
         -:   63:        
         -:   64:    
-        2:   65:        coil_bit = READ(InputRegister[reg], Regbit);
-        2:   66:        Txtempbuf[regTx] |=  coil_bit << RegbitTx;
+        3:   65:        coil_bit = READ(InputRegister[reg], Regbit);
+        3:   66:        Txtempbuf1[regTx] |=  coil_bit << RegbitTx;
         -:   67:        
         -:   68:    
         -:   69:    }
@@ -73,8 +73,8 @@
         2:   71:    for (byte_index = 0; byte_index < (regTx+1); byte_index++) {
         -:   72:        //4times
         1:   73:        wordOffset = byte_index * 2;
-        1:   74:        ModbusTcpTxBuf[9 + wordOffset] = (Txtempbuf[byte_index] % 0x100);
-        1:   75:        ModbusTcpTxBuf[10 + wordOffset] = (Txtempbuf[byte_index] / 0x100);
+        1:   74:        ModbusTcpTxBuf[9 + wordOffset] = (Txtempbuf1[byte_index] % 0x100);
+        1:   75:        ModbusTcpTxBuf[10 + wordOffset] = (Txtempbuf1[byte_index] / 0x100);
         -:   76:    }
         -:   77:
         1:   78:    limit = ModbusTcpTxBuf[5] + 0x6;

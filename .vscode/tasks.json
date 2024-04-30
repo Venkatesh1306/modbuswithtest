@@ -8,7 +8,7 @@
             "args": [
                 "-o",
                 "${workspaceFolder}/test/test",
-                "-fprofile-arcs",
+               "-fprofile-arcs",
                 "-ftest-coverage",
                 "${workspaceFolder}/Modbus1/FrameFunction.c",
                 "${workspaceFolder}/Modbus1/Packet_parser.c",

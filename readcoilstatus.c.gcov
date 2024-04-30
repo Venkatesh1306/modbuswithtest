@@ -33,51 +33,51 @@
         -:   31: */
         -:   32:
         -:   33:WORD
-    #####:   34:readcoilstatus(BYTE *ModbusTcpTxBuf,WORD *DataRegister, parse1 *parse) {
+        1:   34:readcoilstatus(BYTE *ModbusTcpTxBuf,WORD *DataRegister, parse1 *parse) {
         -:   35:
         -:   36:    // WORD dummy[100];
         -:   37:
-    #####:   38:    ModbusTcpTxBuf[0] = parse->TransactionID.v[1];
-    #####:   39:    ModbusTcpTxBuf[1] = parse->TransactionID.v[0];
+        1:   38:    ModbusTcpTxBuf[0] = parse->TransactionID.v[1];
+        1:   39:    ModbusTcpTxBuf[1] = parse->TransactionID.v[0];
         -:   40:
-    #####:   41:    ModbusTcpTxBuf[2] = parse->ProtocolID.v[1];
-    #####:   42:    ModbusTcpTxBuf[3] = parse->ProtocolID.v[0];
+        1:   41:    ModbusTcpTxBuf[2] = parse->ProtocolID.v[1];
+        1:   42:    ModbusTcpTxBuf[3] = parse->ProtocolID.v[0];
         -:   43:
-    #####:   44:    ModbusTcpTxBuf[4] = 0X0;
+        1:   44:    ModbusTcpTxBuf[4] = 0X0;
         -:   45:
-    #####:   46:    ModbusTcpTxBuf[6] = parse->UnitID;
-    #####:   47:    ModbusTcpTxBuf[7] = parse->FunctionCode;
+        1:   46:    ModbusTcpTxBuf[6] = parse->UnitID;
+        1:   47:    ModbusTcpTxBuf[7] = parse->FunctionCode;
         -:   48:
-    #####:   49:    byte_count = (parse->NumberofRegister.Val / 0x8) + 1;
-    #####:   50:    ModbusTcpTxBuf[8] = byte_count;
+        1:   49:    byte_count = (parse->NumberofRegister.Val / 0x8) + 1;
+        1:   50:    ModbusTcpTxBuf[8] = byte_count;
         -:   51:    //byte_index = 9;
-    #####:   52:    ModbusTcpTxBuf[5] = 0x03 + byte_count;
+        1:   52:    ModbusTcpTxBuf[5] = 0x03 + byte_count;
         -:   53:
-    #####:   54:    NoOfBits = parse->NumberofRegister.Val;
+        1:   54:    NoOfBits = parse->NumberofRegister.Val;
         -:   55:
         -:   56:
-    #####:   57:    for (bit_count = 0; bit_count < NoOfBits; bit_count++) // byte count 
+       10:   57:    for (bit_count = 0; bit_count < NoOfBits; bit_count++) // byte count 
         -:   58:    {
-    #####:   59:        Regbit = (parse->StartAddress.Val + bit_count -1) % 16; // 20 - 1 % 16 = 4th bit
-    #####:   60:        reg = (parse->StartAddress.Val + bit_count -1) / 16; // 20 - 1 /16 = 1st  reg
-    #####:   61:        RegbitTx = (bit_count) % 16; // 20 - 1 % 16 = 4th bit -- bit increment
-    #####:   62:        regTx = (bit_count) / 16; // 20 - 1 /16 = 1st  reg -- register increment
+        9:   59:        Regbit = (parse->StartAddress.Val + bit_count -1) % 16; // 20 - 1 % 16 = 4th bit
+        9:   60:        reg = (parse->StartAddress.Val + bit_count -1) / 16; // 20 - 1 /16 = 1st  reg
+        9:   61:        RegbitTx = (bit_count) % 16; // 20 - 1 % 16 = 4th bit -- bit increment
+        9:   62:        regTx = (bit_count) / 16; // 20 - 1 /16 = 1st  reg -- register increment
         -:   63:        
         -:   64:    
-    #####:   65:        coil_bit = READ(DataRegister[reg], Regbit);
-    #####:   66:        Txtempbuf[regTx] |=  coil_bit << RegbitTx;
+        9:   65:        coil_bit = READ(DataRegister[reg], Regbit);
+        9:   66:        Txtempbuf[regTx] |=  coil_bit << RegbitTx;
         -:   67:        
         -:   68:    
         -:   69:    }
         -:   70:
-    #####:   71:    for (byte_index = 0; byte_index < (regTx+1); byte_index++) {
+        2:   71:    for (byte_index = 0; byte_index < (regTx+1); byte_index++) {
         -:   72:        //4times
-    #####:   73:        wordOffset = byte_index * 2;
-    #####:   74:        ModbusTcpTxBuf[9 + wordOffset] = (Txtempbuf[byte_index] % 0x100);
-    #####:   75:        ModbusTcpTxBuf[10 + wordOffset] = (Txtempbuf[byte_index] / 0x100);
+        1:   73:        wordOffset = byte_index * 2;
+        1:   74:        ModbusTcpTxBuf[9 + wordOffset] = (Txtempbuf[byte_index] % 0x100);
+        1:   75:        ModbusTcpTxBuf[10 + wordOffset] = (Txtempbuf[byte_index] / 0x100);
         -:   76:    }
         -:   77:
-    #####:   78:    limit = ModbusTcpTxBuf[5] + 0x6;
-    #####:   79:    return limit;
+        1:   78:    limit = ModbusTcpTxBuf[5] + 0x6;
+        1:   79:    return limit;
         -:   80:}
         -:   81:

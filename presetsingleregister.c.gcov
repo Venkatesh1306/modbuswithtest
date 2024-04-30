@@ -28,40 +28,40 @@
         -:   26: * 
         -:   27: */
         -:   28:
-    #####:   29:WORD presetsingleregister(BYTE *ModbusTcpTxBuf, WORD *DataRegister, parse1 *parse) {
+        2:   29:WORD presetsingleregister(BYTE *ModbusTcpTxBuf, WORD *DataRegister, parse1 *parse) {
         -:   30:    unsigned int length, data1, data2, DATA;
         -:   31:
-    #####:   32:    ModbusTcpTxBuf[0] = parse->TransactionID.v[1];
-    #####:   33:    ModbusTcpTxBuf[1] = parse->TransactionID.v[0];
+        2:   32:    ModbusTcpTxBuf[0] = parse->TransactionID.v[1];
+        2:   33:    ModbusTcpTxBuf[1] = parse->TransactionID.v[0];
         -:   34:
-    #####:   35:    ModbusTcpTxBuf[2] = parse->ProtocolID.v[1];
-    #####:   36:    ModbusTcpTxBuf[3] = parse->ProtocolID.v[0];
+        2:   35:    ModbusTcpTxBuf[2] = parse->ProtocolID.v[1];
+        2:   36:    ModbusTcpTxBuf[3] = parse->ProtocolID.v[0];
         -:   37:
-    #####:   38:    ModbusTcpTxBuf[4] = 0X0;
-    #####:   39:    ModbusTcpTxBuf[5] = parse->Length;
+        2:   38:    ModbusTcpTxBuf[4] = 0X0;
+        2:   39:    ModbusTcpTxBuf[5] = parse->Length;
         -:   40:    // Output[5] = 0X3 + Output[8];
-    #####:   41:    ModbusTcpTxBuf[6] = parse->UnitID;
-    #####:   42:    ModbusTcpTxBuf[7] = parse->FunctionCode;
+        2:   41:    ModbusTcpTxBuf[6] = parse->UnitID;
+        2:   42:    ModbusTcpTxBuf[7] = parse->FunctionCode;
         -:   43:
         -:   44:
         -:   45:    //data1 = parse->NumberofRegister.v[0];
         -:   46:    //data2 = parse->NumberofRegister.v[1]*0x100;
         -:   47:    //DATA = data1 + data2;
-    #####:   48:    if (parse->NumberofRegister.Val >= 65000) {
-    #####:   49:        parse->FunctionCode = parse->FunctionCode + 128 ;
-    #####:   50:        modbuserror(parse, ModbusTcpTxBuf, Illegal_Data_Value);
-    #####:   51:        length = 0x9;
+        2:   48:    if (parse->NumberofRegister.Val >= 65000) {
+        1:   49:        parse->FunctionCode = parse->FunctionCode + 128 ;
+        1:   50:        modbuserror(parse, ModbusTcpTxBuf, Illegal_Data_Value);
+        1:   51:        length = 0x9;
         -:   52:    } else {  
-    #####:   53:    DataRegister[parse->StartAddress.Val] = (parse->NumberofRegister.v[0] + parse->NumberofRegister.v[1]*0x100);
+        1:   53:    DataRegister[parse->StartAddress.Val] = (parse->NumberofRegister.v[0] + parse->NumberofRegister.v[1]*0x100);
         -:   54:
-    #####:   55:    ModbusTcpTxBuf[8] = parse->StartAddress.v[1];
-    #####:   56:    ModbusTcpTxBuf[9] = parse->StartAddress.v[0];
+        1:   55:    ModbusTcpTxBuf[8] = parse->StartAddress.v[1];
+        1:   56:    ModbusTcpTxBuf[9] = parse->StartAddress.v[0];
         -:   57:
-    #####:   58:    ModbusTcpTxBuf[10] = parse->NumberofRegister.v[1]; //Preset Data Hi
-    #####:   59:    ModbusTcpTxBuf[11] = parse->NumberofRegister.v[0]; //Preset Data Lo
+        1:   58:    ModbusTcpTxBuf[10] = parse->NumberofRegister.v[1]; //Preset Data Hi
+        1:   59:    ModbusTcpTxBuf[11] = parse->NumberofRegister.v[0]; //Preset Data Lo
         -:   60:    //DataRegister[parse->StartAddress.Val] = parse->NumberofRegister.Val;
-    #####:   61:    length = 0x6 + parse->Length;
+        1:   61:    length = 0x6 + parse->Length;
         -:   62:    }
-    #####:   63:    return length;
+        2:   63:    return length;
         -:   64:    
         -:   65:}
