@@ -4,61 +4,62 @@
         -:    2:unsigned int c2, d2, l2, bytesrx;
         -:    3:unsigned char exceptioncode;
         -:    4:
-        6:    5:WORD deserialize(parse1 *parse, BYTE *ModbusTcpRxBuf)
+        3:    5:WORD deserialize(parse1 *parse, BYTE *ModbusTcpRxBuf)
         -:    6:{
         -:    7:    // BYTE ModbusTcpTxBuf[0];
         -:    8:
-        6:    9:    parse->TransactionID.v[1] = ModbusTcpRxBuf[0];
-        6:   10:    parse->TransactionID.v[0] = ModbusTcpRxBuf[1];
-        6:   11:    parse->ProtocolID.v[1] = ModbusTcpRxBuf[2];
-        6:   12:    parse->ProtocolID.v[0] = ModbusTcpRxBuf[3];
-        6:   13:    parse->Length = ModbusTcpRxBuf[5];
-        6:   14:    parse->UnitID = ModbusTcpRxBuf[6];
-        6:   15:    parse->FunctionCode = ModbusTcpRxBuf[7];
-        6:   16:    parse->StartAddress.v[1] = ModbusTcpRxBuf[8];
-        6:   17:    parse->StartAddress.v[0] = ModbusTcpRxBuf[9];
-        6:   18:    if (parse->FunctionCode == 0x05)
+        3:    9:    parse->TransactionID.v[1] = ModbusTcpRxBuf[0];
+        3:   10:    parse->TransactionID.v[0] = ModbusTcpRxBuf[1];
+        3:   11:    parse->ProtocolID.v[1] = ModbusTcpRxBuf[2];
+        3:   12:    parse->ProtocolID.v[0] = ModbusTcpRxBuf[3];
+        3:   13:    parse->Length = ModbusTcpRxBuf[5];
+        3:   14:    parse->UnitID = ModbusTcpRxBuf[6];
+        3:   15:    parse->FunctionCode = ModbusTcpRxBuf[7];
+        3:   16:    parse->StartAddress.v[1] = ModbusTcpRxBuf[8];
+        3:   17:    parse->StartAddress.v[0] = ModbusTcpRxBuf[9];
+        3:   18:    if (parse->FunctionCode == 0x05)
         -:   19:    {
     #####:   20:        parse->ForceData[0].v[1] = ModbusTcpRxBuf[10];
     #####:   21:        parse->ForceData[0].v[0] = ModbusTcpRxBuf[11];
         -:   22:    }
         -:   23:    else
         -:   24:    {
-        6:   25:        parse->NumberofRegister.v[1] = ModbusTcpRxBuf[10];
-        6:   26:        parse->NumberofRegister.v[0] = ModbusTcpRxBuf[11];
+        3:   25:        parse->NumberofRegister.v[1] = ModbusTcpRxBuf[10];
+        3:   26:        parse->NumberofRegister.v[0] = ModbusTcpRxBuf[11];
         -:   27:    }
         -:   28:
-        6:   29:    if (parse->FunctionCode == ForceMultipleCoils) // force multiple coils
+        3:   29:    if (parse->FunctionCode == ForceMultipleCoils) // force multiple coils
         -:   30:    {
-        2:   31:        parse->ByteCount = ModbusTcpRxBuf[12];
-        6:   32:        for (c2 = 0; c2 < parse->ByteCount; c2++)
+        1:   31:        parse->ByteCount = ModbusTcpRxBuf[12];
+        3:   32:        for (c2 = 0; c2 < parse->ByteCount/2; c2++)
         -:   33:        {
         -:   34:
-        4:   35:            parse->Coil_data[c2] = (ModbusTcpRxBuf[14 + c2] << 8) | ModbusTcpRxBuf[13 + c2];
-        -:   36:            // parse->ForceData[c2].v[0] = ModbusTcpRxBuf[14 + d2];
+        2:   35:            parse->Coil_data[c2] = (ModbusTcpRxBuf[14 + c2*2] << 8) | ModbusTcpRxBuf[13 + c2*2];
+        -:   36:            //printf("%04x \n",parse->Coil_data[c2]);
         -:   37:        }
-        -:   38:    }
-        -:   39:
-        6:   40:    if (parse->FunctionCode == PresetMultipleRegisters)
-        -:   41:    { // Preset multiple register
-        -:   42:
-    #####:   43:        parse->ByteCount = ModbusTcpRxBuf[12];
-        -:   44:        //        l2 = parse->ByteCount % 2;
-        -:   45:        //
-        -:   46:        //        if (l2 != 0) {
-        -:   47:        //            l2 = (parse->ByteCount / 2) + 1;
-        -:   48:        //        } else {
-        -:   49:        //            l2 = parse->ByteCount / 2;
-        -:   50:        //        }
-        -:   51:
-    #####:   52:        for (c2 = 0; c2 < parse->NumberofRegister.v[0]; c2++)
-        -:   53:        {
-    #####:   54:            d2 = c2 * 2;
-        -:   55:
-    #####:   56:            parse->ForceData[c2].v[1] = ModbusTcpRxBuf[13 + d2];
-    #####:   57:            parse->ForceData[c2].v[0] = ModbusTcpRxBuf[14 + d2];
-        -:   58:        }
-        -:   59:    }
-        6:   60:    bytesrx = 0x6 + parse->Length;
-        6:   61:    return bytesrx;
-        -:   62:}
+        -:   38:        
+        -:   39:    }
+        -:   40:
+        3:   41:    if (parse->FunctionCode == PresetMultipleRegisters)
+        -:   42:    { // Preset multiple register
+        -:   43:
+    #####:   44:        parse->ByteCount = ModbusTcpRxBuf[12];
+        -:   45:        //        l2 = parse->ByteCount % 2;
+        -:   46:        //
+        -:   47:        //        if (l2 != 0) {
+        -:   48:        //            l2 = (parse->ByteCount / 2) + 1;
+        -:   49:        //        } else {
+        -:   50:        //            l2 = parse->ByteCount / 2;
+        -:   51:        //        }
+        -:   52:
+    #####:   53:        for (c2 = 0; c2 < parse->NumberofRegister.v[0]; c2++)
+        -:   54:        {
+    #####:   55:            d2 = c2 * 2;
+        -:   56:
+    #####:   57:            parse->ForceData[c2].v[1] = ModbusTcpRxBuf[13 + d2];
+    #####:   58:            parse->ForceData[c2].v[0] = ModbusTcpRxBuf[14 + d2];
+        -:   59:        }
+        -:   60:    }
+        3:   61:    bytesrx = 0x6 + parse->Length;
+        3:   62:    return bytesrx;
+        -:   63:}

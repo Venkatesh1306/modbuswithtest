@@ -33,7 +33,7 @@
         -:   31: */
         -:   32:
         -:   33:WORD
-    #####:   34:readcoilstatus(BYTE *ModbusTcpTxBuf, WORD COIL[0], parse1 *parse) {
+    #####:   34:readcoilstatus(BYTE *ModbusTcpTxBuf,WORD *DataRegister, parse1 *parse) {
         -:   35:
         -:   36:    // WORD dummy[100];
         -:   37:
@@ -64,7 +64,7 @@
     #####:   62:        regTx = (bit_count) / 16; // 20 - 1 /16 = 1st  reg -- register increment
         -:   63:        
         -:   64:    
-    #####:   65:        coil_bit = READ(COIL[reg], Regbit);
+    #####:   65:        coil_bit = READ(DataRegister[reg], Regbit);
     #####:   66:        Txtempbuf[regTx] |=  coil_bit << RegbitTx;
         -:   67:        
         -:   68:    

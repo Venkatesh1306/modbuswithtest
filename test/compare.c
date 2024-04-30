@@ -79,7 +79,7 @@ unsigned short int Test_ing(const unsigned char ModbusTcpTxBuf[], const unsigned
         reg = ((ModbusTcpRxBuf[9] + bit_count) - 1) / 16;
         for (int i = reg; i <= reg +(ModbusTcpRxBuf[12]/2); i++)
         {
-            //printf("%04x--%04x  ", COIL[i], COIL1[i]);
+            printf("%04x--%04x  ", COIL[i], COIL1[i]);
             if ((COIL[i] != COIL1[i]))
             {
                 test_c = 1;
