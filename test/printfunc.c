@@ -4,9 +4,9 @@ void printfunction()
 {   
     printf(ANSI_COLOR_RESET "\nQuery Packet:%d", incrs + 1);
 
-    if (ModbusTcpTxBuf[7] > 0x80)
+    if (ModbusTxBuf[7] > 0x80)
     {
-        switch (ModbusTcpTxBuf[8])
+        switch (ModbusTxBuf[8])
         {
         case 1:
             printf(ANSI_COLOR_ORANGE " - Function Error ");
@@ -25,8 +25,8 @@ void printfunction()
     printf(ANSI_COLOR_RESET "\n");
     printf("Number of packets to send: %d\n", ModbusTxLength);
 
-    for (int i = 0; i < ModbusTcpRxBuftest[incrs][0]; i++)
-        printf("%02X ", ModbusTcpRxBuf[i]);
+    for (int i = 0; i < ModbusRxBuftest[incrs][0]; i++)
+        printf("%02X ", ModbusRxBuf[i]);
     printf("\n");
 
     printf("Expected Response:\n");
@@ -35,16 +35,16 @@ void printfunction()
     printf("\n");
 
     printf("Actual Response:\n");
-    int responseLength = (ModbusTcpTxBuf[7] == 0x06 || ModbusTcpTxBuf[7] == 0x10 || ModbusTcpTxBuf[7] == 0x05 || ModbusTcpTxBuf[7] == 0x0f) ? 0x0C : ((ModbusTcpTxBuf[7] < 0x80) ? 0x09 + ModbusTcpTxBuf[8] : 0x09);
+    int responseLength = (ModbusTxBuf[7] == 0x06 || ModbusTxBuf[7] == 0x10 || ModbusTxBuf[7] == 0x05 || ModbusTxBuf[7] == 0x0f) ? 0x0C : ((ModbusTxBuf[7] < 0x80) ? 0x09 + ModbusTxBuf[8] : 0x09);
     for (int i = 0; i < responseLength; i++)
-        printf("%02X ", ModbusTcpTxBuf[i]);
+        printf("%02X ", ModbusTxBuf[i]);
     printf("\n");
 
 #endif
 
     printf(Test_Res == 1 ? ANSI_COLOR_GREEN " Test Passed" : ANSI_COLOR_RED " Test failed\n");
 
-    if (ModbusTcpRxBuf[7] == 0x6 || ModbusTcpRxBuf[7] == 0x10 || ModbusTcpTxBuf[7] == 0x05 || ModbusTcpRxBuf[7] == 0x0f)
+    if (ModbusRxBuf[7] == 0x6 || ModbusRxBuf[7] == 0x10 || ModbusTxBuf[7] == 0x05 || ModbusRxBuf[7] == 0x0f)
        
         printf(test_c == 1 ? ANSI_COLOR_RED " - Data not Entered" : ANSI_COLOR_GREEN " - Data Entered");
 

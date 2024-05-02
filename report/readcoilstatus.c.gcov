@@ -1,4 +1,4 @@
-        -:    0:Source:Z:/ModbusTcpRenamed8Fn/libModbus/readcoilstatus.c
+        -:    0:Source:D:/Project_mp/testfinal/libModbus/readcoilstatus.c
         -:    0:Programs:14
         -:    1:#include"../libModbus/ModbusTcp.h"
         -:    2://#define bitcheck(byte,nbit) ((byte) &   (1<<(nbit)))
