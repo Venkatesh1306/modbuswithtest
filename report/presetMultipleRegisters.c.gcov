@@ -1,0 +1,95 @@
+        -:    0:Source:Z:/ModbusTcpRenamed8Fn/libModbus/presetMultipleRegisters.c
+        -:    0:Programs:14
+        -:    1:#include "ModbusTcp.h"
+        -:    2:
+        -:    3:/*QUERY FRAME:
+        -:    4:
+        -:    5:| Transaction Identifier | Protocol Identifier | Length | Unit Identifier | Function Code | Starting Address | Quantity of Registers | Byte Count | Data (2 bytes per register) |
+        -:    6:|------------------------|---------------------|--------|-----------------|---------------|------------------|-----------------------|------------|-----------------------------|
+        -:    7:|       2 bytes          |      2 bytes        |2 bytes |      1 byte     |     1 byte    |     2 bytes      |       2 bytes         |   1 byte   |         n bytes            |
+        -:    8:
+        -:    9:
+        -:   10:RESPONSE FRAME:
+        -:   11:
+        -:   12:| Transaction Identifier | Protocol Identifier | Length | Unit Identifier | Function Code | Starting Address | Quantity of Registers |
+        -:   13:|------------------------|---------------------|--------|-----------------|---------------|------------------|-----------------------|
+        -:   14:|       2 bytes          |      2 bytes        |2 bytes |      1 byte     |     1 byte    |     2 bytes      |       2 bytes         |
+        -:   15:
+        -:   16: * Function Code - 16 (10 HEX)
+        -:   17: * DataRegister[25]={0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0008, 0x0009, 0x0009, 0x0008, 0x0007, 0x0007, 0x0006, 0x0005, 0x0004, 0x0003, 0x0002, 0x0001, 0x0025, 0x0035, 0x0036, 0x9957, 0x7890};
+        -:   18: * INPUT FRAME = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x10, 0x10, 0x00, 0x01, 0x00, 0x02, 0x04, 0x00, 0x0A, 0x01, 0x02}
+        -:   19: * 
+        -:   20: * After Processing the Query the DataRegister changes if no error is detected i.e to preset two registers starting at 01 to 0x0000A, 0x0102  
+        -:   21: * RESPONSE FRAME = {0x0, 0x1, 0x2, 0x3, 0x0, 0x12, 0x10, 0x10, 0x0, 0x1, 0x0, 0x2} - 12 bytes.
+        -:   22: * DATAREGISTER = {0x0000, 0x000A, 0x0102, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0008, 0x0009, 0x0009, 0x0008, 0x0007, 0x0007, 0x0006, 0x0005, 0x0004, 0x0003, 0x0002, 0x0001, 0x0025, 0x0035, 0x0036, 0x9957, 0x7890 }
+        -:   23:
+        -:   24: * If error detected
+        -:   25: * RESPONSE FRAME = {0x0, 0x1, 0x2, 0x3, 0x0, 0x9, 0x10, 0x90, 0x3} - last byte refers to exception code
+        -:   26: * DATAREGISTER UNMODIFIED.
+        -:   27:
+        -:   28: */
+        -:   29:
+        -:   30:
+        -:   31:
+        -:   32:uint16_t
+        2:   33:presetMultipleRegisters (uint8_t *p_modbusTxBuf, uint16_t *p_dataMemory, mbPacketParse_t *p_parseModbusTcpData)
+        -:   34:{
+        -:   35:  //WORD *length;
+        -:   36:  uint16_t length;
+        -:   37:  unsigned int limit, check;
+        -:   38:
+        2:   39:  p_modbusTxBuf[0] = p_parseModbusTcpData->transactionID.v[1];
+        2:   40:  p_modbusTxBuf[1] = p_parseModbusTcpData->transactionID.v[0];
+        -:   41:
+        2:   42:  p_modbusTxBuf[2] = p_parseModbusTcpData->protocolID.v[1];
+        2:   43:  p_modbusTxBuf[3] = p_parseModbusTcpData->protocolID.v[0];
+        -:   44:
+        2:   45:  p_modbusTxBuf[4] = 0X0;
+        -:   46:
+        -:   47:  // Output[5] = 0X3 + Output[8];
+        2:   48:  p_modbusTxBuf[6] = p_parseModbusTcpData->unitID;
+        -:   49:
+        2:   50:  p_modbusTxBuf[7] = p_parseModbusTcpData->functionCode;
+        -:   51:
+        -:   52:
+        -:   53:
+        5:   54:  for (limit = 0; limit < p_parseModbusTcpData->numberofRegister.v[0]; limit++)
+        -:   55:    {
+        -:   56:      //unsigned int data1, data2, DATA;
+        -:   57:      //      data1 = parse->Data[limit].v[0];
+        -:   58:      //      data2 = parse->Data[limit].v[1]*0x100;
+        -:   59:      //      DATA = data1 + data2;
+        3:   60:      if (p_parseModbusTcpData->data[limit].Val >= 65000)
+        -:   61:        {
+        -:   62:
+        -:   63:
+        1:   64:          p_parseModbusTcpData->functionCode = p_parseModbusTcpData->functionCode + 128;
+        1:   65:          modbusError (p_parseModbusTcpData, p_modbusTxBuf, Illegal_Data_Value);
+        1:   66:          limit = p_parseModbusTcpData->numberofRegister.v[0] + 1;
+        1:   67:          length = 0X9;
+        1:   68:          check = 1;
+        -:   69:        }
+        -:   70:      else
+        -:   71:        {
+        2:   72:          p_dataMemory[p_parseModbusTcpData->startAddress.Val + limit] = p_parseModbusTcpData->data[limit].v[0]+(p_parseModbusTcpData->data[limit].v[1]*0x100);
+        -:   73:        }
+        -:   74:
+        -:   75:      //limit1 = limit * 2;
+        -:   76:
+        -:   77:      //DataRegister[parse->StartAddress.Val + limit1] = parse->ForceData.v[0 + limit];
+        -:   78:    }
+        2:   79:  if (check != 1)
+        -:   80:    {
+        1:   81:      p_modbusTxBuf[8] = p_parseModbusTcpData->startAddress.v[1];
+        1:   82:      p_modbusTxBuf[9] = p_parseModbusTcpData->startAddress.v[0];
+        1:   83:      p_modbusTxBuf[10] = p_parseModbusTcpData->numberofRegister.v[1];
+        1:   84:      p_modbusTxBuf[11] = p_parseModbusTcpData->numberofRegister.v[0];
+        1:   85:      p_modbusTxBuf[5] = 0x6;
+        1:   86:      length = 0x12;
+        -:   87:    }
+        -:   88:
+        -:   89:
+        -:   90:  // DataRegister[parse->StartAddress.Val] = (parse->NumberofRegister.v[0] + parse->NumberofRegister.v[1]*0x100);
+        -:   91:
+        2:   92:  return length;
+        -:   93:}

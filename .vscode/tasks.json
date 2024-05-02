@@ -2,25 +2,37 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Delete All Files",
+            "type": "shell",
+            "command": "del",
+            "args": [
+                "${workspaceFolder}/report/*"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
             "label": "Build with Coverage",
             "type": "shell",
             "command": "gcc",
             "args": [
                 "-o",
                 "${workspaceFolder}/test/test",
-               "-fprofile-arcs",
+                "-fprofile-arcs",
                 "-ftest-coverage",
-                "${workspaceFolder}/Modbus1/FrameFunction.c",
-                "${workspaceFolder}/Modbus1/Packet_parser.c",
-                "${workspaceFolder}/Modbus1/modbuserror.c",
-                "${workspaceFolder}/Modbus1/HoldingReg.c",
-                "${workspaceFolder}/Modbus1/Presetsingleregister.c",
-                "${workspaceFolder}/Modbus1/presetmultipleregisters.c",
-                "${workspaceFolder}/Modbus1/readcoilstatus.c",
-                "${workspaceFolder}/Modbus1/forcesinglecoil.c",
-                "${workspaceFolder}/Modbus1/forcemultiplecoils.c",
-                "${workspaceFolder}/Modbus1/readinputstatus.c",
-                "${workspaceFolder}/Modbus1/ReadInputRegisters.c",
+                "${workspaceFolder}/libModbus/ModbusFrame.c",
+                "${workspaceFolder}/libModbus/ModbusPacketParse.c",
+                "${workspaceFolder}/libModbus/modbuserror.c",
+                "${workspaceFolder}/libModbus/holdingReg.c",
+                "${workspaceFolder}/libModbus/presetSingleRegister.c",
+                "${workspaceFolder}/libModbus/presetMultipleRegisters.c",
+                "${workspaceFolder}/libModbus/forcemultiplecoils.c",
+                "${workspaceFolder}/libModbus/forcesinglecoil.c",
+                "${workspaceFolder}/libModbus/ReadInputRegisters.c",
+                "${workspaceFolder}/libModbus/readcoilstatus.c",
+                "${workspaceFolder}/libModbus/readinputstatus.c",
                 "${workspaceFolder}/test/test.c",
                 "${workspaceFolder}/test/head.c",
                 "${workspaceFolder}/test/compare.c",
@@ -29,7 +41,8 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
+            },
+            "dependsOn": "Delete All Files"
         },
         {
             "label": "Run Tests",
@@ -50,26 +63,42 @@
             "args": [
                 "-o",
                 "${workspaceFolder}",
-                "${workspaceFolder}/FrameFunction.gcno",
-                "${workspaceFolder}/Packet_parser.gcno",
-                "${workspaceFolder}/modbuserror.gcno",
-                "${workspaceFolder}/HoldingReg.gcno",
-                "${workspaceFolder}/Presetsingleregister.gcno",
-                "${workspaceFolder}/presetmultipleregisters.gcno",
-                "${workspaceFolder}/readcoilstatus.gcno",
-                "${workspaceFolder}/forcesinglecoil.gcno",
-                "${workspaceFolder}/forcemultiplecoils.gcno",
-                "${workspaceFolder}/readinputstatus.gcno",
-                "${workspaceFolder}/ReadInputRegisters.gcno",
-                "${workspaceFolder}/test.gcno",
-                "${workspaceFolder}/head.gcno",
-                "${workspaceFolder}/compare.gcno",
-                "${workspaceFolder}/printfunc.gcno"
+                "${workspaceFolder}/ModbusFrame",
+                "${workspaceFolder}/ModbusPacketParse",
+                "${workspaceFolder}/modbuserror",
+                "${workspaceFolder}/HoldingReg",
+                "${workspaceFolder}/Presetsingleregister",
+                "${workspaceFolder}/presetmultipleregisters",
+                "${workspaceFolder}/libModbus/forcemultiplecoils",
+                "${workspaceFolder}/libModbus/forcesinglecoil",
+                "${workspaceFolder}/libModbus/ReadInputRegisters",
+                "${workspaceFolder}/libModbus/readcoilstatus",
+                "${workspaceFolder}/libModbus/readinputstatus",
+                "${workspaceFolder}/test",
+                //"${workspaceFolder}/head",
+                "${workspaceFolder}/compare",
+                "${workspaceFolder}/printfunc"
             ],
             "group": {
                 "kind": "test",
                 "isDefault": true
-            }
+            },
+            "dependsOn": "Run Tests" 
+        },
+        {
+            "label": "Run all",
+            "type": "shell",
+            "command": "mv",
+            "args": [
+                "${workspaceFolder}/*.gcov",
+                "${workspaceFolder}/report/"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "dependsOn": "Generate Coverage Report"
         }
+       
     ]
 }

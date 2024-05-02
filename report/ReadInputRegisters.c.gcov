@@ -1,0 +1,33 @@
+        -:    0:Source:Z:/ModbusTcpRenamed8Fn/libModbus/ReadInputRegisters.c
+        -:    0:Programs:14
+        -:    1:#include "ModbusTcp.h"
+        -:    2:
+        1:    3:uint16_t readInputReg(uint8_t *p_modbusTxBuf, uint16_t *p_dataMemory, mbPacketParse_t *p_parseModbusTcpData) {
+        -:    4:    unsigned int bytes;
+        -:    5:    unsigned int a, b;
+        -:    6:
+        1:    7:    p_modbusTxBuf[0] = p_parseModbusTcpData->transactionID.v[1];
+        1:    8:    p_modbusTxBuf[1] = p_parseModbusTcpData->transactionID.v[0];
+        -:    9:
+        1:   10:    p_modbusTxBuf[2] = p_parseModbusTcpData->protocolID.v[1];
+        1:   11:    p_modbusTxBuf[3] = p_parseModbusTcpData->protocolID.v[0];
+        -:   12:
+        1:   13:    p_modbusTxBuf[4] = 0X0;
+        -:   14:
+        -:   15:    // Output[5] = 0X3 + Output[8];
+        1:   16:    p_modbusTxBuf[6] = p_parseModbusTcpData->unitID;
+        1:   17:    p_modbusTxBuf[7] = p_parseModbusTcpData->functionCode;
+        1:   18:    p_modbusTxBuf[8] = (char) (p_parseModbusTcpData->numberofRegister.Val * 2);
+        1:   19:    p_modbusTxBuf[5] = p_modbusTxBuf[8] + 0X03;
+        -:   20:
+        3:   21:    for (a = 0; a < p_parseModbusTcpData->numberofRegister.Val; a++) {
+        2:   22:        b = a * 2;
+        -:   23:
+        2:   24:        p_modbusTxBuf[9 + b] = p_dataMemory[p_parseModbusTcpData->startAddress.Val + a] / 0x100;
+        2:   25:        p_modbusTxBuf[10 + b] = p_dataMemory[p_parseModbusTcpData->startAddress.Val + a] % 0x100;
+        -:   26:    }
+        -:   27:
+        1:   28:    bytes = 0x9 + p_modbusTxBuf[8];
+        1:   29:    return bytes;
+        -:   30:    // return &p_modbusTxBuf;
+        -:   31:}

@@ -1,4 +1,6 @@
-build/default/debug/main.o:  \
-main.c  \
-GenericTypeDefs_1.h  \
-testingdata.h 
+build/default/debug/main.o: main.c libModbus/ModbusTcp.h \
+ libModbus/../modhead.h
+
+libModbus/ModbusTcp.h:
+
+libModbus/../modhead.h:

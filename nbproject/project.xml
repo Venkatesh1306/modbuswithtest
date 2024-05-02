@@ -3,17 +3,12 @@
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>demo_file</name>
-            <creation-uuid>334bb39d-3544-4839-bb1f-d17a669eb8c0</creation-uuid>
+            <name>Modbus</name>
+            <creation-uuid>e28c948a-3a26-441d-bffd-50aa4953340a</creation-uuid>
             <make-project-type>0</make-project-type>
-            <c-extensions>c</c-extensions>
-            <cpp-extensions/>
-            <header-extensions>h</header-extensions>
-            <asminc-extensions/>
             <sourceEncoding>ISO-8859-1</sourceEncoding>
             <make-dep-projects/>
             <sourceRootList>
-                <sourceRootElem>E:\Projects\RIO\New Folder\demo_file.X</sourceRootElem>
                 <sourceRootElem>.</sourceRootElem>
             </sourceRootList>
             <confList>

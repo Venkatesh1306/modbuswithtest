@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=Version6
+PROJECTNAME=ModbusTcpRenamed8Fn
 
 # Active Configuration
 DEFAULTCONF=default

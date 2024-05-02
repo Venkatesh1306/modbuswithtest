@@ -3,7 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Version6/readcoilstatus.c</file>
+            <file>file:/D:/codes/Mobus_t.X/libModbus/ModbusPacketParse.c</file>
+            <file>file:/D:/codes/Mobus_t.X/libModbus/presetMultipleRegisters.c</file>
+            <file>file:/D:/codes/Mobus_t.X/libModbus/ModbusTcp.h</file>
+            <file>file:/D:/codes/Mobus_t.X/modhead.h</file>
+            <file>file:/D:/codes/Mobus_t.X/libModbus/ModbusFrame.c</file>
+            <file>file:/D:/codes/Mobus_t.X/libModbus/presetSingleRegister.c</file>
+            <file>file:/D:/codes/Mobus_t.X/GenericTypeDefs_1.h</file>
+            <file>file:/D:/codes/Mobus_t.X/libModbus/holdingReg.c</file>
+            <file>file:/D:/codes/Mobus_t.X/main.c</file>
+            <file>file:/D:/codes/Mobus_t.X/libModbus/modbuserror.c</file>
         </group>
     </open-files>
 </project-private>

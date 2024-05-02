@@ -1,0 +1,46 @@
+        -:    0:Source:Z:/ModbusTcpRenamed8Fn/libModbus/presetSingleRegister.c
+        -:    0:Programs:14
+        -:    1:#include"../libModbus/ModbusTcp.h"
+        -:    2:
+        -:    3:
+        -:    4:uint16_t
+        2:    5:presetSingleRegister(uint8_t *p_modbusTxBuf, uint16_t *p_dataMemory, mbPacketParse_t *p_parseModbusTcpData)
+        -:    6:{
+        -:    7:  uint16_t length;
+        2:    8:  p_modbusTxBuf[0] = p_parseModbusTcpData->transactionID.v[1];
+        2:    9:  p_modbusTxBuf[1] = p_parseModbusTcpData->transactionID.v[0];
+        -:   10:
+        2:   11:  p_modbusTxBuf[2] = p_parseModbusTcpData->protocolID.v[1];
+        2:   12:  p_modbusTxBuf[3] = p_parseModbusTcpData->protocolID.v[0];
+        -:   13:
+        2:   14:  p_modbusTxBuf[4] = 0X0;
+        2:   15:  p_modbusTxBuf[5] = p_parseModbusTcpData->length;
+        -:   16:
+        2:   17:  p_modbusTxBuf[6] = p_parseModbusTcpData->unitID;
+        2:   18:  p_modbusTxBuf[7] = p_parseModbusTcpData->functionCode;
+        -:   19:
+        -:   20:
+        2:   21:  if (p_parseModbusTcpData->preset_Data.Val >= 65000)
+        -:   22:    {
+        1:   23:      p_parseModbusTcpData->functionCode = p_parseModbusTcpData->functionCode + 128;
+        1:   24:      modbusError (p_parseModbusTcpData, p_modbusTxBuf, Illegal_Data_Value);
+        1:   25:      length = 0x9;
+        -:   26:    }
+        -:   27:  else
+        -:   28:    {
+        1:   29:      p_dataMemory[p_parseModbusTcpData->startAddress.Val] = (p_parseModbusTcpData->preset_Data.v[0] + p_parseModbusTcpData->preset_Data.v[1]*0x100);
+        -:   30:
+        1:   31:      p_modbusTxBuf[8] = p_parseModbusTcpData->startAddress.v[1];
+        1:   32:      p_modbusTxBuf[9] = p_parseModbusTcpData->startAddress.v[0];
+        -:   33:
+        1:   34:      p_modbusTxBuf[10] = p_parseModbusTcpData->preset_Data.v[1]; //Preset Data Hi
+        -:   35:      
+        1:   36:      p_modbusTxBuf[11] = p_parseModbusTcpData->preset_Data.v[0]; //Preset Data Lo
+        -:   37:      //DataRegister[parse->StartAddress.Val] = parse->NumberofRegister.Val;
+        1:   38:      length = 0x6 + p_parseModbusTcpData->length;
+        -:   39:    }
+        2:   40:  return length;
+        -:   41:}
+        -:   42:
+        -:   43:
+        -:   44:

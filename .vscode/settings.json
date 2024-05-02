@@ -3,6 +3,7 @@
         "testingdata.h": "c",
         "stdio.h": "c",
         "generictypedefs_1.h": "c",
-        "testhead.h": "c"
+        "modbustcp.h": "c",
+        "modhead.h": "c"
     }
 }

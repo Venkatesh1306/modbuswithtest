@@ -1,0 +1,69 @@
+        -:    0:Source:Z:/ModbusTcpRenamed8Fn/libModbus/forcemultiplecoils.c
+        -:    0:Programs:14
+        -:    1:#include "ModbusTcp.h"
+        -:    2:
+        -:    3:#define SET(x, y) x |= (1 << y)
+        -:    4:#define READ(x, y) ((0u == (x & (1 << y))) ? 0u : 1u)
+        -:    5:#define CLEAR(x, y) x &= ~(1 << y)
+        -:    6:
+        -:    7:// coil address -> reg and bit ->
+        -:    8:
+        2:    9:uint16_t forceMultipleCoils(uint8_t *p_modbusTxBuf, uint16_t *p_dataMemory, mbPacketParse_t *p_parseModbusTcpData)
+        -:   10:{
+        -:   11:    unsigned int NoOfBits, bit_count, Regbit, regTx, RegbitTx, reg;
+        -:   12:    // unsigned int coil_byte_index,coil_byte_count, coil_byte_count,coil_byteValue,coil_bit_index,coil_register_index, coil_register_status,coil_data;
+        -:   13:    unsigned int coil_data;
+        2:   14:    p_modbusTxBuf[0] = p_parseModbusTcpData->transactionID.v[1];
+        2:   15:    p_modbusTxBuf[1] = p_parseModbusTcpData->transactionID.v[0];
+        -:   16:
+        2:   17:    p_modbusTxBuf[2] = p_parseModbusTcpData->protocolID.v[1];
+        2:   18:    p_modbusTxBuf[3] = p_parseModbusTcpData->protocolID.v[0];
+        -:   19:
+        2:   20:    p_modbusTxBuf[4] = 0X0;
+        2:   21:    p_modbusTxBuf[5] = 0x06;
+        -:   22:
+        2:   23:    p_modbusTxBuf[6] = p_parseModbusTcpData->unitID;
+        2:   24:    p_modbusTxBuf[7] = p_parseModbusTcpData->functionCode;
+        -:   25:
+        2:   26:    p_modbusTxBuf[8] = p_parseModbusTcpData->startAddress.v[1];
+        2:   27:    p_modbusTxBuf[9] = p_parseModbusTcpData->startAddress.v[0];
+        -:   28:
+        2:   29:    p_modbusTxBuf[10] = p_parseModbusTcpData->numberofRegister.v[1];
+        2:   30:    p_modbusTxBuf[11] = p_parseModbusTcpData->numberofRegister.v[0];
+        -:   31:
+        2:   32:    NoOfBits = p_parseModbusTcpData->numberofRegister.Val; // Quantity of coils
+        -:   33:
+        3:   34:    for (bit_count = NoOfBits - 1; bit_count >= 0; bit_count--) // byte count
+        -:   35:    {
+        4:   36:        Regbit = (p_parseModbusTcpData->startAddress.Val + bit_count - 1) % 16; // 20 - 1 % 16 = 4th bit
+        3:   37:        reg = (p_parseModbusTcpData->startAddress.Val + bit_count - 1) / 16;    // 20 - 1 /16 = 1st  reg
+        -:   38:
+        3:   39:        RegbitTx = (bit_count) % 16; // 20 - 1 % 16 = 4th bit -- bit increment
+        3:   40:        regTx = (bit_count) / 16;    // 20 - 1 /16 = 1st  reg -- register increment
+        -:   41:
+        3:   42:        if (p_parseModbusTcpData->coilData[regTx] > 65000)
+        -:   43:        {
+        1:   44:            p_parseModbusTcpData->functionCode = p_parseModbusTcpData->functionCode + 0x80;
+        1:   45:            modbusError(p_parseModbusTcpData, p_modbusTxBuf, Illegal_Data_Value);
+        1:   46:            break;
+        -:   47:        }
+        -:   48:        else
+        -:   49:        {
+        2:   50:            coil_data = READ(p_parseModbusTcpData->coilData[regTx], RegbitTx);
+        -:   51:
+        2:   52:            if (coil_data == 0x1)
+        -:   53:            {
+        1:   54:                SET(p_dataMemory[reg], Regbit);
+        -:   55:            }
+        -:   56:            else
+        -:   57:            {
+        1:   58:                CLEAR(p_dataMemory[reg], Regbit);
+        -:   59:            }
+        2:   60:            if (bit_count == 0)
+        -:   61:            {
+        1:   62:                break;
+        -:   63:            }
+        -:   64:        }
+        -:   65:    }
+        2:   66:    return 0x12;
+        -:   67:}
