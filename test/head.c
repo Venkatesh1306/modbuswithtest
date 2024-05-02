@@ -1,12 +1,12 @@
 #include <stdint.h>
 
-#define INR_SIZE 21
+#define INR_SIZE 23
 
 int increment;
 int Test_Res;
 int test_c;
 unsigned int incrs;
-unsigned int ModbusTxLength;
+uint16_t ModbusTxLength;
 uint8_t ModbusRxBuftest[INR_SIZE][100];
 uint8_t Test_TXtest[INR_SIZE][100];
 uint8_t ModbusRxBuf[100];

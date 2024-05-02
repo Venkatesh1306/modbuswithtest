@@ -7,7 +7,7 @@
 // define the values
 #define test_ing
 #define result
-#define INR_SIZE 21
+#define INR_SIZE 23
 #define GET_BIT(x, pos) ((x >> pos) & 1)
 #define SET(PIN, N) (PIN |= (1 << N))
 #define CLR(PIN, N) (PIN &= ~(1 << N))
@@ -23,7 +23,7 @@ extern int increment;
 extern int Test_Res;
 extern int test_c;
 extern unsigned int incrs;
-extern unsigned int ModbusTxLength;
+extern uint16_t ModbusTxLength;
 extern uint8_t ModbusRxBuftest[INR_SIZE][100];
 extern uint8_t Test_TXtest[INR_SIZE][100];
 extern uint8_t ModbusRxBuf[100];
@@ -40,5 +40,5 @@ extern uint16_t numRegisters;
 // declaration of the function
 // uint16_t processexpecteddata(uint8_t *ModbusRxBuf, uint8_t *Test_tx, uint16_t Dataregister[]);
 uint16_t Test_ing(const uint8_t ModbusTxBuf[], const uint8_t Test_tx[]);
-uint16_t modbusTcpFrame(uint8_t *p_modbusRxBuf, uint16_t *p_dataMemory, uint8_t *p_modbusTxBuf, uint16_t modBusframeLength);
+uint16_t modbusTcpFrame(uint8_t *p_modbusRxBuf, uint16_t *p_dataMemory, uint8_t *p_modbusTxBuf, uint16_t *modBusframeLength);
 void printfunction();

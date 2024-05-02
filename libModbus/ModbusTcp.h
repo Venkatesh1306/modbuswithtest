@@ -44,7 +44,7 @@ typedef struct {
 
 } WORD_VAL1, WORD_BITS1;
 //extern uint16_t *length;
-uint16_t modbusTcpFrame(uint8_t *p_modbusRxBuf, uint16_t *p_dataMemory, uint8_t *p_modbusTxBuf,uint16_t modBusframeLength);
+uint16_t modbusTcpFrame(uint8_t *p_modbusRxBuf, uint16_t *p_dataMemory, uint8_t *p_modbusTxBuf,uint16_t *modBusframeLength);
 
 uint16_t modbusTcpParse(mbPacketParse_t *p_parseModbusTcpData, uint8_t *p_modbusRxBuf);
 
